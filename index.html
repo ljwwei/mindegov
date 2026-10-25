@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>民德市政府官方網站 - 智慧民德．幸福永續 (Minde City Government)</title>
+  <meta name="description" content="民德市政府全球資訊網，提供全市民眾最即時的市政公告、便民申辦服務、各局處介紹、重大活動資訊及市長信箱線上通報系統。">
+  <meta name="keywords" content="民德市, 民德市政府, 市長信箱, 便民服務, 民政局, 財政局, 工務局, 教育局, 智慧城市, 1999市民專線">
+  <meta name="author" content="民德市政府資訊處">
+  
+  <!-- Open Graph 社交媒體標籤 -->
+  <meta property="og:title" content="民德市政府官方網站 - 智慧民德．幸福永續">
+  <meta property="og:description" content="民德市最新市政焦點、便民服務申辦、各局處介紹與市長信箱線上互動平台。">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+
+  <!-- 樣式表鏈結 -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- 無障礙跳至主要內容區 (Skip Link) -->
+  <a href="#mainContent" class="skip-link" id="skipLink">跳至主要內容區 (Alt+C)</a>
+
+  <!-- ========================================================
+       1. 頂端無障礙與便民公務工具列 (Top Utility Bar)
+       ======================================================== -->
+  <div class="top-utility-bar" role="region" aria-label="無障礙與網站工具">
+    <div class="container">
+      <div class="utility-left">
+        <div class="utility-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span>國曆 115 年 10 月 25 日 星期日</span>
+        </div>
+        <div class="utility-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <span>民德市區 24°C 晴朗</span>
+          <span class="weather-badge">空品良好 AQI 32</span>
+        </div>
+      </div>
+
+      <div class="utility-right">
+        <!-- 無障礙字級調整 -->
+        <div class="accessibility-tools" aria-label="文字大小切換">
+          <span style="font-size: 0.75rem; color: #94a3b8; margin-right: 0.2rem;">字級：</span>
+          <button class="font-size-btn" data-scale="0.9" title="縮小字體">小 A</button>
+          <button class="font-size-btn active" data-scale="1" title="預設字體大小">中 A</button>
+          <button class="font-size-btn" data-scale="1.15" title="放大字體">大 A</button>
+        </div>
+
+        <!-- 高對比模式 -->
+        <button class="contrast-toggle-btn" id="contrastToggleBtn" title="切換高對比無障礙顯示模式">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"></path>
+          </svg>
+          <span>高對比模式</span>
+        </button>
+
+        <a href="#footer" class="utility-item" style="color: #cbd5e1;" title="網站導覽與無障礙宣告">網站導覽</a>
+        <button class="utility-item" style="color: #cbd5e1;" onclick="showToast('English version is under maintenance. (英文版維護中)', 'info')">English</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       2. 即時防汛與重要快訊跑馬燈 (Alert Ticker)
+       ======================================================== -->
+  <div class="emergency-ticker" id="emergencyTicker" role="alert" aria-live="polite">
+    <div class="container">
+      <div class="ticker-wrapper">
+        <span class="ticker-tag">
+          <svg style="width: 14px; height: 14px; stroke: currentColor;" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          即時市政快訊
+        </span>
+        <div class="ticker-content">
+          <div class="ticker-text">
+            【防汛整備】因應秋季鋒面與東北季風增強，民德市各抽水站與滯洪池已預降水位待命，河濱水門目前維持正常通行；砂包借用請洽各區公所。 ｜ 【智慧便民】「智慧市民卡 3.0」即日起上線，捷運搭乘即享 8 折與規費線上扣抵！ ｜ 【市政徵才】環保局公開招募儲備隊員 120 名，起薪上看 4 萬 3 千元！
+          </div>
+        </div>
+        <button class="ticker-close" id="tickerCloseBtn" title="暫時收合公告">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       3. 官方主導覽列 (Main Header)
+       ======================================================== -->
+  <header class="main-header" role="banner">
+    <div class="container header-container">
+      <!-- 官方市府 Logo 區 -->
+      <a href="index.html" class="brand-logo-link" aria-label="回到民德市政府官網首頁">
+        <div class="brand-emblem" aria-hidden="true">
+          <!-- 市徽 SVG: 結合科技光芒與綠意水岸象徵 -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">民德市政府</span>
+          <span class="brand-subtitle">Minde City Government</span>
+        </div>
+      </a>
+
+      <!-- 桌面主導覽連結 -->
+      <nav class="main-nav" id="mainNav" role="navigation" aria-label="主選單導覽">
+        <ul class="nav-list">
+          <li>
+            <a href="#home" class="nav-link active">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              <span>首頁</span>
+            </a>
+          </li>
+          <li>
+            <a href="#services" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>便民服務</span>
+            </a>
+          </li>
+          <li>
+            <a href="#announcements" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span>最新公告</span>
+            </a>
+          </li>
+          <li>
+            <a href="#events" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <span>市府活動</span>
+            </a>
+          </li>
+          <li>
+            <a href="#departments" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+              <span>各局處介紹</span>
+            </a>
+          </li>
+          <li>
+            <a href="#mailbox" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <span>市長信箱／申辦</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- 搜尋與行動按鈕 -->
+      <div class="header-actions">
+        <button class="quick-search-trigger" aria-label="開啟全站智慧搜尋" title="按 Ctrl+K 或 / 開啟搜尋">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>搜尋市政與便民服務...</span>
+          <kbd class="quick-search-key">Ctrl+K</kbd>
+        </button>
+
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="開啟或收合行動版導覽選單" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       主要內容區域 (Main Content Landmark)
+       ======================================================== -->
+  <main id="mainContent">
+
+    <!-- ========================================================
+         章節 1: 英雄視覺輪播與市政指標 (Hero Section)
+         ======================================================== -->
+    <section class="hero-section" id="home" aria-label="市政焦點橫幅">
+      <div class="hero-slider">
+        <!-- 幻燈片 1: 市政大樓與宜居城市 -->
+        <div class="hero-slide active">
+          <div class="slide-bg-wrapper">
+            <img src="assets/images/minde_city_hall.jpg" alt="民德市政大樓宏偉外觀與市民廣場噴泉" class="slide-bg-img">
+            <div class="slide-overlay"></div>
+          </div>
+          <div class="container">
+            <div class="hero-content">
+              <span class="slide-tag">
+                <svg style="width: 14px; height: 14px; stroke: currentColor;" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                施政願景・永續宜居
+              </span>
+              <h1 class="slide-title">智慧民德<br>打造市民最幸福的家園</h1>
+              <p class="slide-desc">
+                民德市政府以「以人為本、科技創新、開放治理」為核心，持續升級各項便民公共服務、全齡福利照護與智慧綠能公共運輸網絡。
+              </p>
+              <div class="slide-actions">
+                <a href="#services" class="btn btn-primary">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                  探索熱門便民服務
+                </a>
+                <a href="#mailbox" class="btn btn-outline-white">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path></svg>
+                  市民在線陳情建言
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 幻燈片 2: 國際智慧城市論壇 -->
+        <div class="hero-slide">
+          <div class="slide-bg-wrapper">
+            <img src="assets/images/smart_city_expo.jpg" alt="民德智慧城市高峰論壇展會實況" class="slide-bg-img">
+            <div class="slide-overlay"></div>
+          </div>
+          <div class="container">
+            <div class="hero-content">
+              <span class="slide-tag">前瞻科技・全球接軌</span>
+              <h2 class="slide-title">2026 國際智慧高峰會<br>數位孿生與淨零碳排</h2>
+              <p class="slide-desc">
+                匯聚全球 12 國市長與數位科技先驅，聚焦 AI 城市防災大數據與永續綠電電網，席次有限即日起開放預約。
+              </p>
+              <div class="slide-actions">
+                <a href="#events" class="btn btn-gold">線上搶先預約席次</a>
+                <a href="#announcements" class="btn btn-outline-white">查閱詳細大會議程</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 幻燈片 3: 水岸光影藝術季 -->
+        <div class="hero-slide">
+          <div class="slide-bg-wrapper">
+            <img src="assets/images/waterfront_festival.jpg" alt="民德水岸光影藝術季夜景與市民遊憩" class="slide-bg-img">
+            <div class="slide-overlay"></div>
+          </div>
+          <div class="container">
+            <div class="hero-content">
+              <span class="slide-tag">文化藝術・週末好去處</span>
+              <h2 class="slide-title">民德水岸光影藝術季<br>點亮璀璨河畔之夜</h2>
+              <p class="slide-desc">
+                24 組大型戶外光影巨作、週末水幕無人機秀與百攤市民在地美食市集，邀您一同走入光之秘境。
+              </p>
+              <div class="slide-actions">
+                <a href="#events" class="btn btn-primary">參觀指南與接駁資訊</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 輪播控制器 -->
+      <div class="slider-controls" aria-label="輪播導航控制">
+        <button class="slider-arrow-btn" id="sliderPrevBtn" aria-label="上一張輪播圖">
+          <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="slider-dots">
+          <button class="slider-dot active" data-index="0" aria-label="跳至第 1 張幻燈片"></button>
+          <button class="slider-dot" data-index="1" aria-label="跳至第 2 張幻燈片"></button>
+          <button class="slider-dot" data-index="2" aria-label="跳至第 3 張幻燈片"></button>
+        </div>
+        <button class="slider-arrow-btn" id="sliderNextBtn" aria-label="下一張輪播圖">
+          <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- 市政關鍵績效指標看板 (Civic Stats Bar) -->
+    <div class="civic-stats-bar" aria-label="民德市治理指標">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">2,768,520</span>
+              <span class="stat-label">民德市設籍人口</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">98.4 %</span>
+              <span class="stat-label">便民服務市民滿意度</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">2.4 天</span>
+              <span class="stat-label">市長信箱平均結案時效</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">1999 專線</span>
+              <span class="stat-label">全天候 24 小時守護市民</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================
+         章節 2: 便民服務快速入口 (Citizen Quick Services)
+         ======================================================== -->
+    <section class="services-section" id="services" aria-labelledby="servicesTitle">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Convenient Services</span>
+          <h2 class="section-title" id="servicesTitle">便民服務快速入口</h2>
+          <p class="section-subtitle">
+            整合戶籍謄本、地方稅繳納、工程報修及社會福利，提供一站式 24 小時不打烊的數位市民服務
+          </p>
+        </div>
+
+        <!-- 服務分類篩選鈕 -->
+        <div class="category-filter-pills" role="tablist" aria-label="便民服務分類">
+          <button class="filter-pill service-filter-pill active" data-service-cat="all">全部便民項目</button>
+          <button class="filter-pill service-filter-pill" data-service-cat="household">戶政身分</button>
+          <button class="filter-pill service-filter-pill" data-service-cat="tax">稅務財政</button>
+          <button class="filter-pill service-filter-pill" data-service-cat="construction">工務維修</button>
+          <button class="filter-pill service-filter-pill" data-service-cat="transit">交通停車</button>
+          <button class="filter-pill service-filter-pill" data-service-cat="welfare">社會福利</button>
+          <button class="filter-pill service-filter-pill" data-service-cat="eco">環境清運</button>
+          <button class="filter-pill service-filter-pill" data-service-cat="health">衛生醫療</button>
+        </div>
+
+        <!-- 服務卡片網格 -->
+        <div class="services-grid" id="servicesGridContainer">
+          <!-- 由 js/announcements.js 動態渲染 -->
+        </div>
+
+        <!-- 常用便民快捷工具條 -->
+        <div class="quick-tools-strip">
+          <div class="quick-tools-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>常用市民生活快捷鍵：</span>
+          </div>
+          <div class="quick-tools-list">
+            <button class="quick-tool-btn" onclick="openServiceModal('srv-07')">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon></svg>
+              <span>即時垃圾車 GPS 地圖</span>
+            </button>
+            <button class="quick-tool-btn" onclick="openServiceModal('srv-05')">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+              <span>市區公車即時動態</span>
+            </button>
+            <button class="quick-tool-btn" onclick="openServiceModal('srv-02')">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              <span>路邊停車費線上查繳</span>
+            </button>
+            <button class="quick-tool-btn" onclick="openServiceModal('srv-04')">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span>市立圖書館線上續借</span>
+            </button>
+            <button class="quick-tool-btn" onclick="showToast('已啟動 1999 智慧市政客服文字助理', 'info')">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              <span>1999 線上文字智能客服</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         章節 3: 最新公告專區 (Latest Announcements)
+         ======================================================== -->
+    <section class="announcements-section" id="announcements" aria-labelledby="announcementsTitle">
+      <div class="container announcements-container">
+        <div class="section-header">
+          <span class="section-tag">News & Notices</span>
+          <h2 class="section-title" id="announcementsTitle">最新市政公告</h2>
+          <p class="section-subtitle">
+            掌握民德市政府各項重大政策、標案採購招標、就業快報及重大警戒訊息
+          </p>
+        </div>
+
+        <!-- 公告工具列 (分類與搜尋) -->
+        <div class="announcement-toolbar">
+          <div class="announcement-tabs" role="tablist">
+            <button class="announcement-tab active" data-category="all">全部公告</button>
+            <button class="announcement-tab" data-category="news">市政焦點</button>
+            <button class="announcement-tab" data-category="urgent">重要警戒</button>
+            <button class="announcement-tab" data-category="events">活動訊息</button>
+            <button class="announcement-tab" data-category="tenders">招標採購</button>
+            <button class="announcement-tab" data-category="recruit">徵才快訊</button>
+          </div>
+
+          <div class="announcement-search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="announcementSearchInput" placeholder="篩選公告標題或局處..." aria-label="篩選公告">
+          </div>
+        </div>
+
+        <!-- 公告條目清單 -->
+        <div class="announcements-list" id="announcementsListContainer">
+          <!-- 由 js/announcements.js 動態渲染 -->
+        </div>
+
+        <div class="announcement-footer">
+          <button class="btn btn-secondary" onclick="showToast('已為您呈現全體 8 筆公告資料', 'info')">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            <span>檢視歷史市政公告檔案庫</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         章節 4: 市府活動專區 (City Events Section)
+         ======================================================== -->
+    <section class="events-section" id="events" aria-labelledby="eventsTitle">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">City Events</span>
+          <h2 class="section-title" id="eventsTitle">市府重大活動專區</h2>
+          <p class="section-subtitle">
+            走入充滿活力的民德市！精彩文化展演、國際高峰論壇與市民體育賽事邀您共襄盛舉
+          </p>
+        </div>
+
+        <!-- 活動卡片網格 -->
+        <div class="events-grid" id="cityEventsGridContainer">
+          <!-- 由 js/announcements.js 動態渲染 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         章節 5: 各局處介紹區塊 (Departments Directory)
+         ======================================================== -->
+    <section class="departments-section" id="departments" aria-labelledby="departmentsTitle">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">City Bureaus & Departments</span>
+          <h2 class="section-title" id="departmentsTitle">各局處介紹與業務職掌</h2>
+          <p class="section-subtitle">
+            民德市政府設有民政局、財政局、工務局、教育局等 10 大專責機關，致力提供廉能高效率的市政服務
+          </p>
+        </div>
+
+        <!-- 局處分類與搜尋條 -->
+        <div class="departments-filter-bar">
+          <div class="dept-category-tabs" role="tablist">
+            <button class="dept-cat-btn active" data-dept-cat="all">全部局處 (10)</button>
+            <button class="dept-cat-btn" data-dept-cat="governance">政務與民生</button>
+            <button class="dept-cat-btn" data-dept-cat="finance">財政與經濟</button>
+            <button class="dept-cat-btn" data-dept-cat="infrastructure">工務與交通</button>
+            <button class="dept-cat-btn" data-dept-cat="education">教育與文化</button>
+          </div>
+
+          <div class="dept-search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="deptSearchInput" placeholder="搜尋局處名稱、首長或業務職掌..." aria-label="搜尋局處">
+          </div>
+        </div>
+
+        <!-- 局處卡片網格 -->
+        <div class="departments-grid" id="departmentsGridContainer">
+          <!-- 由 js/departments.js 動態渲染 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         章節 6: 市長信箱／線上申辦表單 (Mayor's Mailbox & Inquiry)
+         ======================================================== -->
+    <section class="mailbox-section" id="mailbox" aria-labelledby="mailboxTitle">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Mayor's Mailbox & Case Tracking</span>
+          <h2 class="section-title" id="mailboxTitle">市長信箱／線上申辦</h2>
+          <p class="section-subtitle">
+            市民的聲音是市政進步的最大推動力！請透過互動式線上表單提出建言，並可即時追蹤承辦歷程
+          </p>
+        </div>
+
+        <div class="mailbox-card-wrapper">
+          <!-- 頁籤按鈕列 -->
+          <div class="mailbox-nav-tabs" role="tablist">
+            <button class="mailbox-tab-btn active" data-target="paneForm" role="tab" aria-selected="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              <span>市長信箱陳情建言</span>
+            </button>
+            <button class="mailbox-tab-btn" data-target="paneInquiry" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <span>案件辦理進度查詢</span>
+            </button>
+            <button class="mailbox-tab-btn" data-target="paneGuidelines" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <span>通報須知與線上申辦引導</span>
+            </button>
+          </div>
+
+          <!-- 分頁 1: 市長信箱填寫表單 -->
+          <div class="mailbox-tab-pane active" id="paneForm" role="tabpanel">
+            <div id="mailboxFormWrapper">
+              <!-- 表單進度引導條 -->
+              <div class="form-stepper" aria-label="表單填寫步驟">
+                <div class="stepper-step active" id="stepIndicator1">
+                  <div class="step-circle">1</div>
+                  <span class="step-label">事項分類</span>
+                </div>
+                <div class="stepper-step" id="stepIndicator2">
+                  <div class="step-circle">2</div>
+                  <span class="step-label">案情地點</span>
+                </div>
+                <div class="stepper-step" id="stepIndicator3">
+                  <div class="step-circle">3</div>
+                  <span class="step-label">照片事證</span>
+                </div>
+                <div class="stepper-step" id="stepIndicator4">
+                  <div class="step-circle">4</div>
+                  <span class="step-label">身分驗證</span>
+                </div>
+              </div>
+
+              <!-- 步驟 1: 事項分類 -->
+              <div class="form-step-content" id="formStep1">
+                <div class="form-grid">
+                  <div class="form-group full-width">
+                    <label class="form-label" for="caseCategory">
+                      案件陳情建議分類 <span class="required-star">*</span>
+                    </label>
+                    <select class="form-control" id="caseCategory" required>
+                      <option value="">-- 請選擇陳情建議權責類別 --</option>
+                      <option value="交通路政與號誌">交通路政／號誌故障／公車捷運班次</option>
+                      <option value="道路平整與路燈修復">道路平整／路面坑洞／路燈不亮</option>
+                      <option value="環境衛生與噪音異味">環境衛生／噪音污染／垃圾清運</option>
+                      <option value="民政戶政與兵役">民政業務／戶籍身分／區公所便民</option>
+                      <option value="社會福利與長者照顧">社會福利／托育補助／敬老長照津貼</option>
+                      <option value="校園教育與學童安全">學校教育／學區分發／通學步道安全</option>
+                      <option value="產業經貿與都市發展">商圈振興／違章建築／都市更新建議</option>
+                      <option value="前瞻市政興革建議">前瞻市政興革建言與市長施政回饋</option>
+                    </select>
+                    <span class="form-hint">選擇適當分類能加速案件分派至正確局處承辦。</span>
+                  </div>
+
+                  <div class="form-group full-width">
+                    <label class="form-label" for="caseTitle">
+                      陳情主旨說明 <span class="required-star">*</span>
+                    </label>
+                    <input type="text" class="form-control" id="caseTitle" placeholder="例如：中央區民德大道路面下陷通報建請盡速修補" maxlength="60" required>
+                    <span class="form-hint">請簡明摘要反映之具體重點，限 60 字以內。</span>
+                  </div>
+                </div>
+
+                <div style="text-align: right; margin-top: 1.5rem;">
+                  <button type="button" class="btn btn-primary form-next-step-btn">
+                    下一步：填寫具體詳情與地點
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 步驟 2: 案情詳述與地點 -->
+              <div class="form-step-content" id="formStep2" style="display: none;">
+                <div class="form-grid">
+                  <div class="form-group full-width">
+                    <label class="form-label" for="caseContent">
+                      案情詳細內容與市民建議 <span class="required-star">*</span>
+                    </label>
+                    <textarea class="form-control" id="caseContent" placeholder="請具體敘明事情發生的人、事、時、地、物及期望市府協助處理方式（至少 15 字以上）..." rows="5" required></textarea>
+                  </div>
+
+                  <div class="form-group full-width">
+                    <label class="form-label" for="caseLocation">
+                      具體發生地點或鄰近門牌地址 <span class="required-star">*</span>
+                    </label>
+                    <div style="display: flex; gap: 0.5rem;">
+                      <input type="text" class="form-control" id="caseLocation" placeholder="例如：民德市中央區市政大道一段 120 號前（靠捷運 2 號出口）" required>
+                      <button type="button" class="btn btn-secondary" id="mailboxGpsBtn" style="white-space: nowrap;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+                        定位目前位置
+                      </button>
+                    </div>
+                    <span class="form-hint">提供精確地點有助於外勤工務及巡查同仁精準定位勘查。</span>
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+                  <button type="button" class="btn btn-secondary form-prev-step-btn">上一步</button>
+                  <button type="button" class="btn btn-primary form-next-step-btn">
+                    下一步：上傳佐證檔案
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 步驟 3: 照片事證上傳 -->
+              <div class="form-step-content" id="formStep3" style="display: none;">
+                <div class="form-group full-width">
+                  <label class="form-label">事證照片／相關檔案附件上傳（選填）</label>
+                  <div class="file-dropzone" id="mailboxFileDropzone">
+                    <div class="dropzone-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    </div>
+                    <p style="font-weight: 600; font-size: 1rem; color: var(--gov-navy); margin-bottom: 0.3rem;">
+                      點擊選取檔案 或 將照片拖曳至此處
+                    </p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">
+                      支援 JPG, PNG, PDF 格式，單一檔案上限 10MB（最多 3 份附件）
+                    </p>
+                    <input type="file" id="mailboxFileInput" multiple accept="image/*,.pdf" style="display: none;">
+                  </div>
+                  <div class="file-list-preview" id="fileListPreview"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+                  <button type="button" class="btn btn-secondary form-prev-step-btn">上一步</button>
+                  <button type="button" class="btn btn-primary form-next-step-btn">
+                    下一步：填寫聯絡人身分驗證
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 步驟 4: 身分驗證與送出 -->
+              <div class="form-step-content" id="formStep4" style="display: none;">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label" for="citizenName">
+                      陳情人姓名 <span class="required-star">*</span>
+                    </label>
+                    <input type="text" class="form-control" id="citizenName" placeholder="請輸入您的真實姓名" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="citizenPhone">
+                      行動電話號碼 <span class="required-star">*</span>
+                    </label>
+                    <input type="tel" class="form-control" id="citizenPhone" placeholder="例如：0912345678" maxlength="10" required>
+                    <span class="form-hint">用於接收簡訊驗證碼與案件結案通知。</span>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="citizenEmail">
+                      電子郵件信箱 <span class="required-star">*</span>
+                    </label>
+                    <input type="email" class="form-control" id="citizenEmail" placeholder="例如：citizen@example.com" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="verificationCode">
+                      簡訊驗證碼 <span class="required-star">*</span>
+                    </label>
+                    <div class="captcha-row">
+                      <input type="text" class="form-control" id="verificationCode" placeholder="請輸入 4 碼驗證碼" maxlength="4" required>
+                      <button type="button" class="send-code-btn" id="sendVerificationCodeBtn">
+                        發送驗證碼
+                      </button>
+                    </div>
+                    <span class="form-hint" style="color: var(--gov-blue);">提示：點擊發送將自動接收測試驗證碼（預設 8866）</span>
+                  </div>
+
+                  <div class="form-group full-width" style="margin-top: 0.5rem;">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="privacyAgreeCheck" checked required>
+                      <span>我已閱讀並同意<strong>《民德市政府個人資料保護法告知條款》</strong>及<strong>《市民陳情通報處理要點》</strong>，所陳報之內容均屬真實，並同意市府專責人員與本人電話聯繫勘驗。</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                  <button type="button" class="btn btn-secondary form-prev-step-btn">上一步</button>
+                  <button type="button" class="btn btn-primary" id="submitMailboxBtn" style="padding-left: 2rem; padding-right: 2rem;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    確認送出通報案件
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 分頁 2: 案件辦理進度查詢 -->
+          <div class="mailbox-tab-pane" id="paneInquiry" role="tabpanel">
+            <div style="text-align: center; max-width: 680px; margin: 0 auto 2rem;">
+              <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--gov-navy); margin-bottom: 0.5rem;">
+                市民案件歷程即時追蹤系統
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.92rem;">
+                請輸入通報時取得之案件追蹤編號（例如：MD-20261020-0042）或通報人手機號碼查詢辦理進度與公文回覆。
+              </p>
+            </div>
+
+            <!-- 查詢輸入框 -->
+            <div class="inquiry-search-bar">
+              <input type="text" class="form-control" id="inquiryCaseInput" placeholder="請輸入案件編號（例如：MD-20261020-0042）..." aria-label="輸入案件編號">
+              <button class="btn btn-primary" id="inquirySearchBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                查詢進度
+              </button>
+            </div>
+
+            <!-- 快速測試案號點擊 -->
+            <div class="sample-case-chips">
+              <span>快速試查範例案件：</span>
+              <button class="sample-chip" data-case="MD-20261020-0042">MD-20261020-0042 (已結案修復)</button>
+              <button class="sample-chip" data-case="MD-20261023-0188">MD-20261023-0188 (現地會勘中)</button>
+            </div>
+
+            <!-- 查詢結果渲染容器 -->
+            <div id="caseQueryResult">
+              <!-- 由 js/mailbox.js 動態渲染 -->
+            </div>
+          </div>
+
+          <!-- 分頁 3: 通報須知與線上申辦指引 -->
+          <div class="mailbox-tab-pane" id="paneGuidelines" role="tabpanel">
+            <div style="max-width: 800px; margin: 0 auto; line-height: 1.8; color: var(--text-sub);">
+              <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--gov-navy); margin-bottom: 1rem;">
+                市民陳情陳核與線上申辦須知
+              </h3>
+              
+              <div style="background: var(--bg-surface-raised); padding: 1.25rem; border-left: 4px solid var(--gov-blue); border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+                <strong>市長給市民的承諾：</strong>「民德市民的每一件小事，都是市府團隊的大事。」所有自本平台登錄之通報與建言，將於 24 小時內完成初審分案，並於 3 至 5 個工作天內由專責局處正式函覆查處情形。
+              </div>
+
+              <h4 style="font-weight: 700; color: var(--gov-navy); margin-bottom: 0.5rem;">一、受理事態原則</h4>
+              <ul style="padding-left: 1.25rem; margin-bottom: 1.5rem;">
+                <li>道路路面破損、坑洞、號誌異常、路燈熄滅等民生安全事項（工務局 24 小時搶修小組）。</li>
+                <li>環境噪音、異味、烏賊車檢舉、垃圾清運路線調整建言（環保局稽查大隊）。</li>
+                <li>市政重大規劃、交通公車路線、學區劃分與社會福利請領資格諮詢。</li>
+              </ul>
+
+              <h4 style="font-weight: 700; color: var(--gov-navy); margin-bottom: 0.5rem;">二、不受理事項說明</h4>
+              <ul style="padding-left: 1.25rem; margin-bottom: 1.5rem;">
+                <li>無具體內容、匿名或虛構姓名、未提供有效聯絡方式者。</li>
+                <li>同一事由業經權責機關明確答覆結案，且無新事證而重複陳情者。</li>
+                <li>涉及司法訴訟起訴審理中，或行政救濟程序進行中之案件。</li>
+              </ul>
+
+              <h4 style="font-weight: 700; color: var(--gov-navy); margin-bottom: 0.5rem;">三、其他即時通報管道</h4>
+              <p>緊急災害搶救請撥 119、治安事故通報請撥 110、市政綜合諮詢請撥市民當家熱線 1999。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       官方頁尾 (Official Government Footer)
+       ======================================================== -->
+  <footer class="main-footer" id="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- 局處聯絡核心資訊 -->
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
+            <div class="brand-emblem" style="width: 36px; height: 36px;" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            </div>
+            <span class="brand-title" style="font-size: 1.3rem;">民德市政府</span>
+          </div>
+          <div class="brand-slogan">智慧民德・幸福永續 (Smart Minde, Sustainable & Happy)</div>
+          
+          <ul class="footer-contact-list">
+            <li class="footer-contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span>機關地址：100001 民德市中央區市政大道一段 1 號</span>
+            </li>
+            <li class="footer-contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <span>市府總機：(02) 2345-6789 ｜ 市民熱線：1999（外縣市撥 02-2345-1999）</span>
+            </li>
+            <li class="footer-contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              <span>辦公時間：週一至週五 08:30 - 17:30（中午不打烊，國定例假日休息）</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 熱門局處專區 -->
+        <div>
+          <h4 class="footer-title">市政重要局處</h4>
+          <ul class="footer-links">
+            <li><a href="#departments" onclick="openDepartmentModal('dept-civil')">民政局 (戶政兵役)</a></li>
+            <li><a href="#departments" onclick="openDepartmentModal('dept-finance')">財政局 (稅務公產)</a></li>
+            <li><a href="#departments" onclick="openDepartmentModal('dept-publicworks')">工務局 (水利養工)</a></li>
+            <li><a href="#departments" onclick="openDepartmentModal('dept-education')">教育局 (智慧教育)</a></li>
+            <li><a href="#departments" onclick="openDepartmentModal('dept-social')">社會局 (兒少長照)</a></li>
+            <li><a href="#departments" onclick="openDepartmentModal('dept-epb')">環境保護局 (清運稽查)</a></li>
+          </ul>
+        </div>
+
+        <!-- 便民資訊服務 -->
+        <div>
+          <h4 class="footer-title">市民申辦指南</h4>
+          <ul class="footer-links">
+            <li><a href="#services">常用便民服務入口</a></li>
+            <li><a href="#mailbox">市長信箱線上通報</a></li>
+            <li><a href="#mailbox" onclick="querySpecificCase('MD-20261020-0042')">通報進度即時查核</a></li>
+            <li><a href="#announcements">政府公開招標採購</a></li>
+            <li><a href="#events">文化觀光與展演活動</a></li>
+            <li><a href="#footer" onclick="showToast('已複製防汛免付費通報電話：0800-001-999', 'info')">防汛專區與砂包借用</a></li>
+          </ul>
+        </div>
+
+        <!-- 政府無障礙認證與相關連結 -->
+        <div class="footer-badges">
+          <h4 class="footer-title">公信認證與資安</h4>
+          
+          <div class="accessibility-seal">
+            <div class="seal-icon">AAA</div>
+            <div class="seal-text">
+              <strong>無障礙網頁檢測 AAA 認證</strong>
+              <span>符合國家通訊傳播委員會最高無障礙規範</span>
+            </div>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">
+            <div>本網站資料開放宣告：CC-BY 4.0</div>
+            <div>累積瀏覽總人次：<strong>14,892,104</strong> 人</div>
+            <div>最近版本更新日期：115 年 10 月 25 日</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 頁尾宣告與版權 -->
+      <div class="footer-bottom">
+        <div>
+          © 2026 民德市政府版權所有 ｜ Minde City Government All Rights Reserved.
+        </div>
+        <div class="footer-legal-links">
+          <a href="#footer" onclick="showToast('民德市政府恪遵個人資料保護法，保障您的隱私安全。', 'info')">隱私權保護宣告</a>
+          <a href="#footer" onclick="showToast('本網站通過 ISO 27001 資訊安全認證標準。', 'info')">資訊安全政策</a>
+          <a href="#footer" onclick="showToast('市府開放資料平台遵循政府資料開放授權條款。', 'info')">政府開放資料</a>
+          <a href="#skipLink">回到頂端 (Alt+U)</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 回到頂端浮動按鈕 -->
+  <button class="back-to-top" id="backToTopBtn" aria-label="平滑滾動回頁面頂端" title="回到頂端">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <!-- ========================================================
+       全域模態視窗系統 (Global Modals)
+       ======================================================== -->
+
+  <!-- 1. 最新公告詳情對話框 -->
+  <div class="modal-backdrop" id="announcementDetailModal" role="dialog" aria-modal="true" aria-labelledby="modalNoticeTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalNoticeTitle">最新公告事項詳情</h3>
+        <button class="modal-close-btn" aria-label="關閉對話框">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="modalNoticeMeta" style="display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;"></div>
+        <div id="modalNoticeContent"></div>
+        <div id="modalNoticeAttachments"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.print()">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          列印此公報
+        </button>
+        <button class="btn btn-primary modal-close-btn">確定關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 便民服務詳情對話框 -->
+  <div class="modal-backdrop" id="serviceDetailModal" role="dialog" aria-modal="true" aria-labelledby="modalServiceTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalServiceTitle">便民服務線上申辦說明</h3>
+        <button class="modal-close-btn" aria-label="關閉對話框">✕</button>
+      </div>
+      <div class="modal-body" id="modalServiceBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close-btn">返回列表</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 各局處介紹詳情對話框 -->
+  <div class="modal-backdrop" id="departmentDetailModal" role="dialog" aria-modal="true" aria-labelledby="modalDeptTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalDeptTitle">局處組織與業務職掌</h3>
+        <button class="modal-close-btn" aria-label="關閉對話框">✕</button>
+      </div>
+      <div class="modal-body" id="modalDeptBody"></div>
+    </div>
+  </div>
+
+  <!-- 4. 市府活動報名對話框 -->
+  <div class="modal-backdrop" id="eventRegisterModal" role="dialog" aria-modal="true" aria-labelledby="modalEventTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalEventTitle">市府活動線上登記報名</h3>
+        <button class="modal-close-btn" aria-label="關閉對話框">✕</button>
+      </div>
+      <div class="modal-body" id="modalEventBody"></div>
+    </div>
+  </div>
+
+  <!-- 5. 全站智慧搜尋對話框 -->
+  <div class="modal-backdrop" id="globalSearchModal" role="dialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header" style="border-bottom: none; padding-bottom: 0;">
+        <div style="display: flex; align-items: center; gap: 0.6rem; width: 100%;">
+          <svg style="width: 22px; height: 22px; stroke: var(--gov-blue);" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="globalSearchInput" placeholder="請輸入關鍵字（例如：戶籍、地價稅、工務局、公托...）" style="width: 100%; border: none; font-size: 1.15rem; font-weight: 600; outline: none; background: transparent;" aria-label="全站搜尋輸入">
+        </div>
+        <button class="modal-close-btn" id="closeSearchModalBtn" aria-label="關閉搜尋">✕</button>
+      </div>
+      <div class="modal-body" style="padding-top: 1rem; max-height: 60vh;">
+        <div id="globalSearchResults"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心資料與互動腳本鏈結 -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/announcements.js"></script>
+  <script src="js/departments.js"></script>
+  <script src="js/mailbox.js"></script>
+</body>
+</html>

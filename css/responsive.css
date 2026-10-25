@@ -1,0 +1,352 @@
+/**
+ * 民德市政府官網 - 響應式與無障礙列印樣式 (Responsive & Print Media Queries)
+ * 智慧民德．幸福永續
+ */
+
+/* ========================================================
+   桌面與筆電螢幕適配 (1200px 以下)
+   ======================================================== */
+@media (max-width: 1200px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ========================================================
+   平板電腦橫向與縱向適配 (992px 以下)
+   ======================================================== */
+@media (max-width: 992px) {
+  /* 導覽列轉換為行動版漢堡選單抽屜 */
+  .mobile-menu-toggle {
+    display: inline-flex;
+  }
+
+  .main-nav {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 72px);
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-light);
+    padding: 1.5rem;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+    box-shadow: var(--shadow-xl);
+    z-index: 998;
+  }
+
+  .main-nav.open {
+    transform: translateX(0);
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .nav-link {
+    padding: 0.85rem 1.25rem;
+    font-size: 1.05rem;
+    border-radius: var(--radius-md);
+  }
+
+  .nav-link.active::after {
+    display: none;
+  }
+
+  /* 績效看板轉為 2 欄 */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-item:nth-child(2) {
+    border-right: none;
+  }
+
+  /* 局處介紹卡片轉為 1 欄 */
+  .departments-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 便民服務卡片轉為 2 欄 */
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 活動卡片轉為 2 欄 */
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 頁尾轉為 2 欄 */
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  /* 公告工具列垂直排列 */
+  .announcement-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .announcement-search-box {
+    width: 100%;
+  }
+
+  .dept-search-box {
+    width: 100%;
+  }
+}
+
+/* ========================================================
+   智慧型手機適配 (768px 以下)
+   ======================================================== */
+@media (max-width: 768px) {
+  /* 頂端公務列簡化 */
+  .top-utility-bar .utility-left {
+    display: none;
+  }
+
+  .top-utility-bar .container {
+    justify-content: flex-end;
+  }
+
+  /* 輪播主視覺文字適配 */
+  .hero-slider {
+    min-height: 480px;
+  }
+
+  .hero-content {
+    padding: 3rem 0;
+  }
+
+  .slide-title {
+    font-size: 2rem;
+  }
+
+  .slide-desc {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  /* 績效看板轉為 1 欄或更緊湊 */
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .stat-item {
+    padding: 0.4rem;
+    border-right: none;
+  }
+
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .stat-value {
+    font-size: 1.15rem;
+  }
+
+  /* 便民服務轉為 1 欄 */
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 市府活動轉為 1 欄 */
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 最新公告條目響應式換行 */
+  .announcement-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 1rem;
+  }
+
+  .announcement-main {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .announcement-title {
+    white-space: normal;
+    font-size: 0.95rem;
+    width: 100%;
+  }
+
+  .announcement-meta {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+    font-size: 0.8rem;
+  }
+
+  /* 市長信箱表單 */
+  .mailbox-tab-pane {
+    padding: 1.5rem 1rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full-width {
+    grid-column: span 1;
+  }
+
+  .form-stepper {
+    margin-bottom: 2rem;
+  }
+
+  .step-label {
+    display: none;
+  }
+
+  .inquiry-search-bar {
+    flex-direction: column;
+  }
+
+  .sample-case-chips {
+    flex-wrap: wrap;
+  }
+
+  /* 頁尾單欄排列 */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .footer-legal-links {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .quick-search-trigger span {
+    display: none;
+  }
+
+  .quick-search-key {
+    display: none;
+  }
+}
+
+/* ========================================================
+   極窄型手機螢幕適配 (480px 以下)
+   ======================================================== */
+@media (max-width: 480px) {
+  .brand-title {
+    font-size: 1.2rem;
+  }
+
+  .brand-subtitle {
+    display: none;
+  }
+
+  .brand-emblem {
+    width: 40px;
+    height: 40px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .slide-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .quick-tools-strip {
+    padding: 1rem;
+  }
+
+  .quick-tool-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .back-to-top {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+/* ========================================================
+   列印模式專用樣式 (@media print)
+   ======================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt;
+  }
+
+  .top-utility-bar,
+  .emergency-ticker,
+  .main-header,
+  .hero-section,
+  .civic-stats-bar,
+  .slider-controls,
+  .quick-tools-strip,
+  .announcement-toolbar,
+  .announcement-footer,
+  .departments-filter-bar,
+  .mailbox-nav-tabs,
+  .form-stepper,
+  .file-dropzone,
+  .captcha-row .send-code-btn,
+  .btn,
+  .back-to-top,
+  .toast-container,
+  .modal-backdrop {
+    display: none !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .announcement-item,
+  .department-card,
+  .case-result-card {
+    border: 1px solid #999999 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  .dept-duties-list li svg,
+  .service-icon-box svg {
+    display: none;
+  }
+
+  a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+}

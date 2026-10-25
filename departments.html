@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>各局處介紹與業務職掌 - 民德市政府官方網站</title>
+  <meta name="description" content="民德市政府一級機關及局處介紹，包含民政局、財政局、工務局、教育局、社會局等組織職掌、首長資訊與便民服務窗口。">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- 無障礙跳至主要內容區 -->
+  <a href="#mainContent" class="skip-link">跳至主要內容區 (Alt+C)</a>
+
+  <!-- 頂端公務列 -->
+  <div class="top-utility-bar">
+    <div class="container">
+      <div class="utility-left">
+        <div class="utility-item">
+          <span>國曆 115 年 10 月 25 日 星期日 ｜ 民德市區 24°C 晴朗</span>
+        </div>
+      </div>
+      <div class="utility-right">
+        <div class="accessibility-tools">
+          <span style="font-size: 0.75rem; color: #94a3b8;">字級：</span>
+          <button class="font-size-btn" data-scale="0.9">小 A</button>
+          <button class="font-size-btn active" data-scale="1">中 A</button>
+          <button class="font-size-btn" data-scale="1.15">大 A</button>
+        </div>
+        <button class="contrast-toggle-btn" id="contrastToggleBtn">
+          <span>高對比模式</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主導覽列 -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo-link">
+        <div class="brand-emblem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">民德市政府</span>
+          <span class="brand-subtitle">Minde City Government</span>
+        </div>
+      </a>
+
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-list">
+          <li><a href="index.html#home" class="nav-link">首頁</a></li>
+          <li><a href="index.html#services" class="nav-link">便民服務</a></li>
+          <li><a href="index.html#announcements" class="nav-link">最新公告</a></li>
+          <li><a href="index.html#events" class="nav-link">市府活動</a></li>
+          <li><a href="departments.html" class="nav-link active">各局處介紹</a></li>
+          <li><a href="mailbox.html" class="nav-link">市長信箱／申辦</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="quick-search-trigger">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>搜尋局處與業務...</span>
+        </button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主要內容區 -->
+  <main id="mainContent" style="padding-top: 2rem;">
+    <!-- 頁面 Banner -->
+    <div style="background: linear-gradient(135deg, var(--gov-navy-deep), var(--gov-navy)); color: #fff; padding: 3.5rem 0; margin-bottom: 3rem;">
+      <div class="container">
+        <div style="max-width: 750px;">
+          <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gov-cyan); font-weight: 700; margin-bottom: 0.5rem;">Organization & Public Services</div>
+          <h1 style="font-size: 2.4rem; font-weight: 800; margin-bottom: 0.8rem;">市府各局處介紹與業務職掌</h1>
+          <p style="font-size: 1.1rem; color: #cbd5e1; line-height: 1.6;">
+            民德市政府設有民政局、財政局、工務局、教育局等 10 大一級機關。各部門秉持廉能高效理念，推動各項攸關市民福祉之施政計畫。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="padding-bottom: 5rem;">
+      <!-- 分類與搜尋 -->
+      <div class="departments-filter-bar">
+        <div class="dept-category-tabs" role="tablist">
+          <button class="dept-cat-btn active" data-dept-cat="all">全部局處 (10)</button>
+          <button class="dept-cat-btn" data-dept-cat="governance">政務與民生</button>
+          <button class="dept-cat-btn" data-dept-cat="finance">財政與經濟</button>
+          <button class="dept-cat-btn" data-dept-cat="infrastructure">工務與交通</button>
+          <button class="dept-cat-btn" data-dept-cat="education">教育與文化</button>
+        </div>
+
+        <div class="dept-search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="deptSearchInput" placeholder="搜尋局處、首長或業務項目..." aria-label="搜尋局處">
+        </div>
+      </div>
+
+      <!-- 局處清單網格 -->
+      <div class="departments-grid" id="departmentsGridContainer"></div>
+    </div>
+  </main>
+
+  <!-- 頁尾 -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 民德市政府版權所有 ｜ Minde City Government All Rights Reserved.</div>
+        <div class="footer-legal-links">
+          <a href="index.html">返回官網首頁</a>
+          <a href="mailbox.html">前往市長信箱</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 局處詳情 Modal -->
+  <div class="modal-backdrop" id="departmentDetailModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalDeptTitle">局處組織與業務職掌</h3>
+        <button class="modal-close-btn">✕</button>
+      </div>
+      <div class="modal-body" id="modalDeptBody"></div>
+    </div>
+  </div>
+
+  <!-- 搜尋 Modal -->
+  <div class="modal-backdrop" id="globalSearchModal">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <input type="text" id="globalSearchInput" placeholder="搜尋局處與便民服務..." style="width: 100%; border: none; font-size: 1.1rem; outline: none;">
+        <button class="modal-close-btn" id="closeSearchModalBtn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="globalSearchResults"></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="back-to-top" id="backToTopBtn" title="回到頂端">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/departments.js"></script>
+</body>
+</html>

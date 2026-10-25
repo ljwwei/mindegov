@@ -1,0 +1,817 @@
+/**
+ * 民德市政府官網 - 核心樣式系統 (Design System & Global Layout)
+ * 智慧民德．幸福永續
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+  /* 政府權威藍色系核心調色盤 */
+  --gov-navy-deep: #071e3d;
+  --gov-navy: #0f3361;
+  --gov-blue: #1a56db;
+  --gov-blue-light: #2563eb;
+  --gov-blue-subtle: #eef4ff;
+  --gov-cyan: #0284c7;
+  
+  /* 輔助與語意色彩 */
+  --gov-gold: #d97706;
+  --gov-gold-light: #fef3c7;
+  --gov-emerald: #059669;
+  --gov-emerald-light: #ecfdf5;
+  --gov-crimson: #dc2626;
+  --gov-crimson-light: #fef2f2;
+  
+  /* 中性色系 */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-raised: #f1f5f9;
+  --bg-glass: rgba(255, 255, 255, 0.88);
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-sub: #475569;
+  --text-inverse: #ffffff;
+  
+  /* 陰影與圓角 */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+  --shadow-xl: 0 20px 35px -5px rgba(15, 23, 42, 0.14);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  
+  /* 字體大小變更因數 (無障礙縮放) */
+  --font-scale: 1;
+  --font-base: calc(16px * var(--font-scale));
+  --font-sans: 'Noto Sans TC', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  /* 轉場 */
+  --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 高對比無障礙模式 */
+[data-theme="contrast"] {
+  --gov-navy-deep: #000000;
+  --gov-navy: #05162b;
+  --gov-blue: #ffeb3b;
+  --gov-blue-light: #ffd600;
+  --gov-blue-subtle: #121f2d;
+  --gov-cyan: #00e5ff;
+  --gov-gold: #ffc107;
+  --gov-gold-light: #2a2405;
+  --gov-emerald: #00e676;
+  --gov-emerald-light: #052917;
+  --gov-crimson: #ff5252;
+  --gov-crimson-light: #3d0c0c;
+  
+  --bg-primary: #0a0e14;
+  --bg-surface: #121820;
+  --bg-surface-raised: #1c2430;
+  --bg-glass: rgba(18, 24, 32, 0.96);
+  --border-light: #334155;
+  --border-medium: #64748b;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-sub: #e2e8f0;
+  --text-inverse: #000000;
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* 全域重設與基礎 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--font-base);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  line-height: 1.65;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 無障礙跳至主要內容 (Skip Link) */
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: 1rem;
+  background: var(--gov-blue);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  z-index: 99999;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 1rem;
+  outline: 3px solid var(--gov-gold);
+}
+
+/* 鍵盤聚焦輔助樣式 */
+:focus-visible {
+  outline: 3px solid var(--gov-blue);
+  outline-offset: 3px;
+}
+
+/* 容器寬度 */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ========================================================
+   頂端無障礙與便民公務工具列 (Top Utility Bar)
+   ======================================================== */
+.top-utility-bar {
+  background-color: var(--gov-navy-deep);
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 1000;
+}
+
+.top-utility-bar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+
+.utility-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.utility-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.utility-item svg {
+  width: 15px;
+  height: 15px;
+  stroke: var(--gov-cyan);
+}
+
+.weather-badge {
+  background: rgba(2, 132, 199, 0.2);
+  color: #7dd3fc;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  border: 1px solid rgba(125, 211, 252, 0.3);
+}
+
+.utility-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* 字級縮放與高對比切換按鈕 */
+.accessibility-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.font-size-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.font-size-btn:hover,
+.font-size-btn.active {
+  background: var(--gov-blue);
+  color: #ffffff;
+}
+
+.contrast-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  transition: all var(--transition-fast);
+}
+
+.contrast-toggle-btn:hover {
+  background: var(--gov-gold);
+  color: #000;
+}
+
+.contrast-toggle-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ========================================================
+   即時緊急市政跑馬燈 (Alert Ticker)
+   ======================================================== */
+.emergency-ticker {
+  background: linear-gradient(90deg, #991b1b, #dc2626);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0;
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.ticker-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.ticker-tag {
+  background: #ffffff;
+  color: #b91c1c;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  margin-right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ticker-content {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.ticker-text {
+  display: inline-block;
+  animation: marquee 26s linear infinite;
+}
+
+.ticker-text:hover {
+  animation-play-state: paused;
+}
+
+.ticker-close {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.2rem;
+  margin-left: 0.8rem;
+}
+
+.ticker-close:hover {
+  color: #ffffff;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ========================================================
+   市府主導覽列 (Main Header & Nav)
+   ======================================================== */
+.main-header {
+  background-color: var(--bg-surface);
+  border-bottom: 2px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  transition: box-shadow var(--transition-fast), background-color var(--transition-normal);
+}
+
+.main-header.scrolled {
+  box-shadow: var(--shadow-md);
+  background-color: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+/* 官方標誌區 */
+.brand-logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-emblem {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--gov-navy), var(--gov-blue));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(15, 51, 97, 0.25);
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+.brand-emblem::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+  transform: rotate(30deg);
+}
+
+.brand-emblem svg {
+  width: 28px;
+  height: 28px;
+  stroke: #ffffff;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--gov-navy);
+  line-height: 1.2;
+}
+
+[data-theme="contrast"] .brand-title {
+  color: var(--text-main);
+}
+
+.brand-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* 主導覽清單 */
+.main-nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 0.5rem;
+}
+
+.nav-link {
+  padding: 0.55rem 0.95rem;
+  font-weight: 600;
+  font-size: 0.96rem;
+  color: var(--text-sub);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.nav-link svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  opacity: 0.8;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--gov-blue);
+  background-color: var(--gov-blue-subtle);
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -0.75rem;
+  left: 0.95rem;
+  right: 0.95rem;
+  height: 3px;
+  background-color: var(--gov-blue);
+  border-radius: 3px 3px 0 0;
+}
+
+/* 快速搜尋與行動版選單按鈕 */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.quick-search-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-light);
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.quick-search-trigger:hover {
+  background: var(--bg-surface);
+  border-color: var(--gov-blue);
+  color: var(--gov-blue);
+  box-shadow: 0 2px 8px rgba(26, 86, 219, 0.1);
+}
+
+.quick-search-trigger svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.quick-search-key {
+  font-size: 0.72rem;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+/* 行動版漢堡切換按鈕 */
+.mobile-menu-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+  background: var(--bg-surface-raised);
+}
+
+.mobile-menu-toggle svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ========================================================
+   章節標題共通組件 (Section Header)
+   ======================================================== */
+.section-header {
+  text-align: center;
+  margin-bottom: 2.75rem;
+  position: relative;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gov-blue);
+  background: var(--gov-blue-subtle);
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.6rem;
+}
+
+.section-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--gov-navy);
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+[data-theme="contrast"] .section-title {
+  color: var(--text-main);
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ========================================================
+   按鈕系統 (Button System)
+   ======================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1.4rem;
+  transition: all var(--transition-normal);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
+.btn-primary {
+  background: var(--gov-blue);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(26, 86, 219, 0.25);
+}
+
+.btn-primary:hover {
+  background: var(--gov-blue-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(26, 86, 219, 0.35);
+}
+
+.btn-secondary {
+  background: var(--bg-surface-raised);
+  color: var(--text-main);
+  border: 1px solid var(--border-medium);
+}
+
+.btn-secondary:hover {
+  background: var(--border-light);
+  color: var(--gov-blue);
+}
+
+.btn-outline-white {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.btn-outline-white:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+}
+
+.btn-gold:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+/* ========================================================
+   市府官方頁尾 (Official Government Footer)
+   ======================================================== */
+.main-footer {
+  background: var(--gov-navy-deep);
+  color: #cbd5e1;
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+  border-top: 4px solid var(--gov-blue);
+  position: relative;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.3fr;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand .brand-title {
+  color: #ffffff;
+  margin-bottom: 0.3rem;
+}
+
+.footer-brand .brand-slogan {
+  color: var(--gov-cyan);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
+}
+
+.footer-contact-list {
+  list-style: none;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.footer-contact-item svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--gov-cyan);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.footer-title {
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.footer-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 32px;
+  height: 2px;
+  background-color: var(--gov-blue);
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  padding-left: 4px;
+}
+
+.footer-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.accessibility-seal {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.seal-icon {
+  font-size: 1.3rem;
+  background: var(--gov-blue);
+  color: #ffffff;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+}
+
+.seal-text {
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.seal-text strong {
+  display: block;
+  color: #ffffff;
+  font-size: 0.88rem;
+}
+
+.footer-bottom {
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.footer-legal-links {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.footer-legal-links a:hover {
+  color: #ffffff;
+}
+
+/* 回到頂端浮動按鈕 */
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 46px;
+  height: 46px;
+  background: var(--gov-navy);
+  color: #ffffff;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  z-index: 990;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: all var(--transition-normal);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: var(--gov-blue);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(26, 86, 219, 0.4);
+}
+
+.back-to-top svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+}
