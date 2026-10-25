@@ -1633,3 +1633,158 @@ textarea.form-control {
 .toast.error {
   border-left-color: var(--gov-crimson);
 }
+
+/* ========================================================
+   12. 民德市徽識別與標準字展示組件 (City Emblem & Brand Identity)
+   ======================================================== */
+.emblem-showcase-card {
+  background: linear-gradient(145deg, #f8fafc, #ffffff);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.emblem-showcase-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1565c0, #059669, #fb8c00);
+}
+
+.emblem-preview-img {
+  max-width: 220px;
+  height: auto;
+  margin: 0 auto 1.5rem;
+  display: block;
+  filter: drop-shadow(0 8px 20px rgba(15, 51, 97, 0.16));
+  transition: transform var(--transition-bounce);
+}
+
+.emblem-preview-img:hover {
+  transform: scale(1.05);
+}
+
+.emblem-concept-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin: 1.75rem 0;
+}
+
+@media (max-width: 768px) {
+  .emblem-concept-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.emblem-concept-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  text-align: left;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.emblem-concept-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.emblem-concept-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.emblem-color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.emblem-concept-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--gov-navy);
+}
+
+.emblem-concept-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.emblem-swatches-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.color-swatch-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.color-swatch-box {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.emblem-download-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .emblem-download-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.emblem-dl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--gov-blue);
+  color: var(--gov-blue);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.emblem-dl-btn:hover {
+  background: var(--gov-blue);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 86, 219, 0.25);
+}
+

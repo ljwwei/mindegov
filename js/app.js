@@ -444,5 +444,30 @@ function closeAllModals() {
   document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('active'));
 }
 
+function openEmblemModal() {
+  const modal = document.getElementById('emblemDetailModal');
+  if (modal) {
+    modal.classList.add('active');
+  }
+}
+
+// 通用對話框關閉綁定
+document.addEventListener('click', (e) => {
+  if (e.target.matches('.modal-close-btn') || e.target.closest('.modal-close-btn')) {
+    closeAllModals();
+  }
+  if (e.target.classList.contains('modal-backdrop')) {
+    closeAllModals();
+  }
+});
+
+// ESC 鍵快速關閉所有 Modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeAllModals();
+  }
+});
+
 window.showToast = showToast;
 window.closeAllModals = closeAllModals;
+window.openEmblemModal = openEmblemModal;

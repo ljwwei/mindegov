@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>市長信箱與案件申辦查詢 - 民德市政府官方網站</title>
   <meta name="description" content="民德市政府市長信箱，提供市民提出施政建言、違規檢舉、道路維修通報及即時查詢公文辦理進度與回覆。">
+  
+  <!-- 網站標誌與圖示 Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="assets/images/logo-badge.png">
+  <meta property="og:image" content="assets/images/logo.png">
+
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
@@ -39,9 +47,9 @@
   <!-- 主導覽列 -->
   <header class="main-header">
     <div class="container header-container">
-      <a href="index.html" class="brand-logo-link">
-        <div class="brand-emblem">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <a href="index.html" class="brand-logo-link" aria-label="回到民德市政府官網首頁" title="民德市政府全球資訊網">
+        <div class="brand-emblem" aria-hidden="true">
+          <img src="assets/images/logo-icon.png" alt="民德市政府市徽" class="brand-logo-img" width="50" height="50">
         </div>
         <div class="brand-text">
           <span class="brand-title">民德市政府</span>
@@ -299,6 +307,15 @@
   <!-- 頁尾 -->
   <footer class="main-footer">
     <div class="container">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <div class="footer-brand-emblem" aria-hidden="true">
+          <img src="assets/images/logo-icon.png" alt="民德市政府市徽" class="footer-logo-img" width="36" height="36">
+        </div>
+        <div>
+          <div style="font-size: 1.25rem; font-weight: 800; color: #ffffff;">民德市政府</div>
+          <div style="font-size: 0.85rem; color: var(--gov-cyan);">智慧民德・幸福永續 ｜ 市長信箱與便民通報</div>
+        </div>
+      </div>
       <div class="footer-bottom">
         <div>© 2026 民德市政府版權所有 ｜ Minde City Government All Rights Reserved.</div>
         <div class="footer-legal-links">
