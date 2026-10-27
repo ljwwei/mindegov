@@ -785,6 +785,13 @@ img {
   font-weight: 800;
 }
 
+.seal-badge {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  display: block;
+}
+
 .seal-text {
   font-size: 0.78rem;
   line-height: 1.3;

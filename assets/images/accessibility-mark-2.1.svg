@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="無障礙標章 2.1">
+  <title>無障礙標章 2.1</title>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3fb55a"/>
+      <stop offset="1" stop-color="#1e8e3e"/>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="114" height="114" rx="18" fill="url(#g)" stroke="#ffffff" stroke-width="3"/>
+  <!-- 無障礙人形 -->
+  <circle cx="60" cy="27" r="8" fill="#fff"/>
+  <path d="M30 44h60v9H70v14l11 25-9 4-12-25-12 25-9-4 11-25V53H30z" fill="#fff"/>
+  <!-- 文字 -->
+  <text x="60" y="108" text-anchor="middle" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="17" font-weight="800" fill="#fff">無障礙 2.1</text>
+</svg>

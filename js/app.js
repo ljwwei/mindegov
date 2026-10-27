@@ -4,12 +4,41 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initLiveClock();
   initAccessibility();
   initHeader();
   initHeroSlider();
   initQuickSearchModal();
   initBackToTop();
 });
+
+/* ========================================================
+   0. 即時台灣時間 (Live Taiwan Clock, Asia/Taipei, 24H)
+   ======================================================== */
+function initLiveClock() {
+  const targets = document.querySelectorAll('[data-live-clock]');
+  if (!targets.length) return;
+
+  const fmt = new Intl.DateTimeFormat('zh-TW', {
+    timeZone: 'Asia/Taipei',
+    year: 'numeric', month: 'numeric', day: 'numeric',
+    weekday: 'long',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false
+  });
+
+  function tick() {
+    const p = {};
+    fmt.formatToParts(new Date()).forEach(x => { p[x.type] = x.value; });
+    const rocYear = parseInt(p.year, 10) - 1911;
+    const hour = p.hour === '24' ? '00' : p.hour;
+    const text = `國曆 ${rocYear} 年 ${p.month} 月 ${p.day} 日 ${p.weekday} ${hour}:${p.minute}:${p.second}`;
+    targets.forEach(el => { el.textContent = text; });
+  }
+
+  tick();
+  setInterval(tick, 1000);
+}
 
 /* ========================================================
    1. 無障礙工具列 (Accessibility Tools)
