@@ -210,6 +210,14 @@ img {
   border: 1px solid rgba(125, 211, 252, 0.3);
 }
 
+/* AQI 分級顏色：0-50 綠 / 51-100 黃 / 101-150 橘 / 151-200 紅 / 201-300 紫紅 / 301-500 褐紅 */
+.weather-badge[data-aqi-level="0"] { color: #00e400; border-color: rgba(0, 228, 0, 0.45); }
+.weather-badge[data-aqi-level="1"] { color: #ffff00; border-color: rgba(255, 255, 0, 0.45); }
+.weather-badge[data-aqi-level="2"] { color: #ff7e00; border-color: rgba(255, 126, 0, 0.5); }
+.weather-badge[data-aqi-level="3"] { color: #ff0000; border-color: rgba(255, 0, 0, 0.5); }
+.weather-badge[data-aqi-level="4"] { color: #8f3f97; border-color: #8f3f97; background: #f1f5f9; font-weight: 700; }
+.weather-badge[data-aqi-level="5"] { color: #7e0023; border-color: #7e0023; background: #f1f5f9; font-weight: 700; }
+
 .utility-right {
   display: flex;
   align-items: center;
@@ -763,10 +771,6 @@ img {
 }
 
 .accessibility-seal {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-sm);
-  padding: 0.75rem;
   display: flex;
   align-items: center;
   gap: 0.85rem;
