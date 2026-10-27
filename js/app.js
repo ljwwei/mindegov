@@ -66,7 +66,7 @@ function initLiveWeather() {
     return '危害';
   }
 
-  // AQI 分級 (0 綠 / 1 黃 / 2 橘 / 3 紅 / 4 紫紅 / 5 褐紅)，對應 CSS [data-aqi-level]
+  // AQI 分級 (0 綠 / 1 黃 / 2 橘 / 3 紅 / 4 紫 / 5 褐紅)，對應 CSS [data-aqi-level]
   function aqiLevel(aqi) {
     if (aqi <= 50) return 0;
     if (aqi <= 100) return 1;
@@ -90,8 +90,7 @@ function initLiveWeather() {
       if (isNaN(aqi)) {
         setAqi('空氣品質 --', '');
       } else {
-        const status = (d.aqiStatus && d.aqiStatus.trim()) || aqiStatus(aqi);
-        setAqi(`空品${status} AQI ${aqi}`, String(aqiLevel(aqi)));
+        setAqi(`空氣品質：${aqiStatus(aqi)} AQI ${aqi}`, String(aqiLevel(aqi)));
       }
     } catch (e) {
       console.warn('[氣象/空品] 讀取失敗', e);
