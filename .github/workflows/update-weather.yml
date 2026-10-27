@@ -2,7 +2,13 @@ name: Update weather data
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    # 避開整點/整十分的高峰時段，GitHub 對這些時間點常延遲或略過
+    - cron: '7,22,37,52 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/fetch-weather.mjs'
+      - '.github/workflows/update-weather.yml'
   workflow_dispatch:
 
 permissions:
