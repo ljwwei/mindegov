@@ -9,7 +9,7 @@ const MINDE_DATA = {
     name: "民德市政府",
     englishName: "Minde City Government",
     slogan: "進步民德・繼續前行",
-    address: "中西區市民大道123號",
+    address: "民德市中西區市民大道123號",
     phone: "(01)123-4567",
     hotline: "1999（外縣市請撥 02-2345-1999）",
     hours: "週一至週五 08:30 - 17:30（中午不打烊，國定例假日休息）",

@@ -786,10 +786,12 @@ img {
 }
 
 .seal-badge {
-  width: 56px;
-  height: 56px;
+  width: 150px;
+  height: auto;
+  max-width: 100%;
   flex-shrink: 0;
   display: block;
+  border-radius: 4px;
 }
 
 .seal-text {
