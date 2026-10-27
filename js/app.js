@@ -45,7 +45,6 @@ function initLiveClock() {
    0-1. 即時氣溫 (中央氣象署 臺南站) 與空氣品質 (環境部 臺南測站)
    ======================================================== */
 function initLiveWeather() {
-  const cfg = window.MINDE_CONFIG || {};
   const tempEls = document.querySelectorAll('[data-live-temp]');
   const aqiEls = document.querySelectorAll('[data-live-aqi]');
   if (!tempEls.length && !aqiEls.length) return;
@@ -67,47 +66,32 @@ function initLiveWeather() {
     return '危害';
   }
 
-  async function loadTemp() {
-    if (!cfg.cwaApiKey) { setTemp('--'); return; }
+  // 資料由 GitHub Actions 定時抓取並寫入 data/weather.json (金鑰僅存在伺服器端)
+  async function refresh() {
     try {
-      const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${encodeURIComponent(cfg.cwaApiKey)}&StationId=${encodeURIComponent(cfg.cwaStationId)}&format=JSON`;
-      const res = await fetch(url);
+      const res = await fetch(`data/weather.json?t=${Date.now()}`, { cache: 'no-store' });
       if (!res.ok) throw new Error(res.status);
-      const json = await res.json();
-      const rec = json.records || {};
-      const st = (rec.Station || rec.station || [])[0];
-      const we = st && (st.WeatherElement || st.weatherElement);
-      const t = parseFloat(we && we.AirTemperature);
-      if (isNaN(t) || t <= -90) throw new Error('invalid temp');
-      setTemp(t.toFixed(1));
-    } catch (e) {
-      console.warn('[氣溫] 讀取失敗', e);
-      setTemp('--');
-    }
-  }
+      const d = await res.json();
 
-  async function loadAqi() {
-    if (!cfg.moenvApiKey) { setAqi('空氣品質 --', ''); return; }
-    try {
-      const url = `https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=${encodeURIComponent(cfg.moenvApiKey)}&limit=1&format=json&filters=${encodeURIComponent('sitename,EQ,' + cfg.moenvSiteName)}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(res.status);
-      const json = await res.json();
-      const list = Array.isArray(json) ? json : (json.records || []);
-      const rec = list.find(r => r.sitename === cfg.moenvSiteName) || list[0];
-      const aqi = parseInt(rec && rec.aqi, 10);
-      if (isNaN(aqi)) throw new Error('invalid aqi');
-      const status = (rec.status && rec.status.trim()) || aqiStatus(aqi);
-      setAqi(`空品${status} AQI ${aqi}`, String(Math.min(5, Math.floor(aqi / 50))));
+      const t = parseFloat(d.temperature);
+      setTemp(isNaN(t) ? '--' : t.toFixed(1));
+
+      const aqi = parseInt(d.aqi, 10);
+      if (isNaN(aqi)) {
+        setAqi('空氣品質 --', '');
+      } else {
+        const status = (d.aqiStatus && d.aqiStatus.trim()) || aqiStatus(aqi);
+        setAqi(`空品${status} AQI ${aqi}`, String(Math.min(5, Math.floor(aqi / 50))));
+      }
     } catch (e) {
-      console.warn('[空氣品質] 讀取失敗', e);
+      console.warn('[氣象/空品] 讀取失敗', e);
+      setTemp('--');
       setAqi('空氣品質 --', '');
     }
   }
 
-  function refresh() { loadTemp(); loadAqi(); }
   refresh();
-  setInterval(refresh, cfg.refreshMs || 600000);
+  setInterval(refresh, 5 * 60 * 1000);
 }
 
 /* ========================================================
