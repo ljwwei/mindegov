@@ -39,6 +39,19 @@ async function fetchAqi() {
   return { aqi, aqiStatus: (rec.status || '').trim(), aqiPublishTime: rec.publishtime };
 }
 
+// 環境部 AQI 為每小時發布一次 (publishtime 為整點)，約每小時 20 分後可取得該整點資料。
+// 因此僅在「每小時 20 分之後」且「已儲存的資料尚非本小時」時才抓取 AQI，其餘時間沿用舊值。
+const AQI_READY_MINUTE = 20;
+
+function shouldFetchAqi(data) {
+  const tw = new Date(Date.now() + 8 * 3600 * 1000); // 以 UTC getter 讀取臺灣時間
+  if (tw.getUTCMinutes() < AQI_READY_MINUTE) return !data.aqiPublishTime; // 尚無資料時仍抓取
+  const p = n => String(n).padStart(2, '0');
+  const currentHour = `${tw.getUTCFullYear()}/${p(tw.getUTCMonth() + 1)}/${p(tw.getUTCDate())} ${p(tw.getUTCHours())}`;
+  const storedHour = (data.aqiPublishTime || '').slice(0, 13);
+  return storedHour < currentHour;
+}
+
 async function main() {
   // 以舊資料為基底：單一來源失敗時保留上一次成功的數值
   let data = {};
@@ -47,8 +60,9 @@ async function main() {
   const jobs = [];
   if (CWA_KEY) jobs.push(fetchTemp().then(r => Object.assign(data, r)).catch(e => console.error('氣溫失敗:', e.message)));
   else console.error('未設定 CWA_API_KEY');
-  if (MOENV_KEY) jobs.push(fetchAqi().then(r => Object.assign(data, r)).catch(e => console.error('AQI 失敗:', e.message)));
-  else console.error('未設定 MOENV_API_KEY');
+  if (!MOENV_KEY) console.error('未設定 MOENV_API_KEY');
+  else if (shouldFetchAqi(data)) jobs.push(fetchAqi().then(r => Object.assign(data, r)).catch(e => console.error('AQI 失敗:', e.message)));
+  else console.log('AQI 本小時資料已是最新或尚未到發布時間，略過抓取');
   await Promise.all(jobs);
 
   data.updatedAt = new Date().toISOString();
