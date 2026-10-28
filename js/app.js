@@ -100,7 +100,11 @@ function initLiveWeather() {
   }
 
   refresh();
-  setInterval(refresh, 5 * 60 * 1000);
+  setInterval(refresh, 2 * 60 * 1000);
+  // 分頁從背景切回前景時立即更新 (背景分頁的計時器會被瀏覽器延後)
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) refresh();
+  });
 }
 
 /* ========================================================
