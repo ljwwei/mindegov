@@ -49,7 +49,32 @@ function initLiveWeather() {
   const aqiEls = document.querySelectorAll('[data-live-aqi]');
   if (!tempEls.length && !aqiEls.length) return;
 
-  function setTemp(text) { tempEls.forEach(el => { el.textContent = text; }); }
+  const tempTimeEls = document.querySelectorAll('[data-live-temp-time]');
+  function setTemp(text, timeText) {
+    tempEls.forEach(el => { el.textContent = text; });
+    tempTimeEls.forEach(el => { el.textContent = timeText ? `(${timeText})` : ''; });
+  }
+
+  // 將資料時間格式化為「HH:MM」(非今日則加上「M/D」)，一律以臺灣時間顯示
+  function formatDataTime(raw, hasOffset) {
+    if (!raw) return '';
+    let y, mo, da, hh, mi;
+    if (hasOffset) {
+      const dt = new Date(raw);
+      if (isNaN(dt)) return '';
+      const tw = new Date(dt.getTime() + 8 * 3600 * 1000);
+      [y, mo, da, hh, mi] = [tw.getUTCFullYear(), tw.getUTCMonth() + 1, tw.getUTCDate(), tw.getUTCHours(), tw.getUTCMinutes()];
+    } else {
+      // 環境部格式: "2026/10/28 18:00:00" (臺灣時間)
+      const m = String(raw).match(/(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})[ T](\d{1,2}):(\d{2})/);
+      if (!m) return '';
+      [y, mo, da, hh, mi] = m.slice(1).map(Number);
+    }
+    const p = n => String(n).padStart(2, '0');
+    const now = new Date(Date.now() + 8 * 3600 * 1000);
+    const isToday = y === now.getUTCFullYear() && mo === now.getUTCMonth() + 1 && da === now.getUTCDate();
+    return `${isToday ? '' : mo + '/' + da + ' '}${p(hh)}:${p(mi)}`;
+  }
   function setAqi(text, level) {
     aqiEls.forEach(el => {
       el.textContent = text;
@@ -84,17 +109,18 @@ function initLiveWeather() {
       const d = await res.json();
 
       const t = parseFloat(d.temperature);
-      setTemp(isNaN(t) ? '--' : t.toFixed(1));
+      setTemp(isNaN(t) ? '--' : t.toFixed(1), isNaN(t) ? '' : formatDataTime(d.tempObsTime, true));
 
       const aqi = parseInt(d.aqi, 10);
       if (isNaN(aqi)) {
         setAqi('空氣品質 --', '');
       } else {
-        setAqi(`空氣品質：${aqiStatus(aqi)} AQI ${aqi}`, String(aqiLevel(aqi)));
+        const aqiTime = formatDataTime(d.aqiPublishTime, false);
+        setAqi(`空氣品質：${aqiStatus(aqi)} AQI ${aqi}${aqiTime ? ` (${aqiTime})` : ''}`, String(aqiLevel(aqi)));
       }
     } catch (e) {
       console.warn('[氣象/空品] 讀取失敗', e);
-      setTemp('--');
+      setTemp('--', '');
       setAqi('空氣品質 --', '');
     }
   }

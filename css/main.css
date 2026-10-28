@@ -215,6 +215,12 @@ img {
   border: 1px solid rgba(125, 211, 252, 0.3);
 }
 
+.weather-time {
+  font-size: 0.78rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
 /* AQI 分級顏色：0-50 良好綠 / 51-100 普通黃 / 101-150 橘 / 151-200 紅 / 201-300 紫 / 301-500 褐紅 */
 .weather-badge[data-aqi-level="0"] { color: #00e400; border-color: rgba(0, 228, 0, 0.45); }
 .weather-badge[data-aqi-level="1"] { color: #ffff00; border-color: rgba(255, 255, 0, 0.45); }
