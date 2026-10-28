@@ -216,22 +216,48 @@ function initHeader() {
 
   // 行動版選單切換
   if (mobileToggle && mainNav) {
+    const setMenu = (open) => {
+      mainNav.classList.toggle('open', open);
+      mobileToggle.setAttribute('aria-expanded', String(open));
+    };
+
     mobileToggle.addEventListener('click', () => {
-      mainNav.classList.toggle('open');
-      const isOpen = mainNav.classList.contains('open');
-      mobileToggle.setAttribute('aria-expanded', isOpen);
+      const willOpen = !mainNav.classList.contains('open');
+      setMenu(willOpen);
+      // 展開時若導覽列不在視窗頂端，捲動讓抽屜完整可見
+      if (willOpen && header) {
+        const top = header.getBoundingClientRect().top;
+        if (top > 0) window.scrollBy({ top, behavior: 'smooth' });
+      }
     });
 
     // 點擊導覽連結時自動關閉行動版選單
     navLinks.forEach(link => {
       link.addEventListener('click', () => {
-        mainNav.classList.remove('open');
-        mobileToggle.setAttribute('aria-expanded', 'false');
+        setMenu(false);
 
         // 啟動當前 active 標籤
         navLinks.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
       });
+    });
+
+    // 點選選單外區域或按 Esc 收合
+    document.addEventListener('click', (e) => {
+      if (!mainNav.classList.contains('open')) return;
+      if (mainNav.contains(e.target) || mobileToggle.contains(e.target)) return;
+      setMenu(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mainNav.classList.contains('open')) {
+        setMenu(false);
+        mobileToggle.focus();
+      }
+    });
+
+    // 放大到桌機寬度時重置選單狀態
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 992) setMenu(false);
     });
   }
 }

@@ -81,14 +81,14 @@
   </header>
 
   <!-- 主要內容區 -->
-  <main id="mainContent" style="padding-top: 2rem; padding-bottom: 5rem;">
+  <main id="mainContent" class="page-main page-main-padded">
     <!-- 頁面 Banner -->
-    <div style="background: linear-gradient(135deg, var(--gov-navy-deep), var(--gov-navy)); color: #fff; padding: 3.5rem 0; margin-bottom: 3rem;">
+    <div class="page-banner">
       <div class="container">
-        <div style="max-width: 750px;">
-          <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gov-cyan); font-weight: 700; margin-bottom: 0.5rem;">Citizen Voice & Service Portal</div>
-          <h1 style="font-size: 2.4rem; font-weight: 800; margin-bottom: 0.8rem;">市長信箱／線上申辦與進度查詢</h1>
-          <p style="font-size: 1.1rem; color: #cbd5e1; line-height: 1.6;">
+        <div class="page-banner-inner">
+          <div class="page-banner-eyebrow">Citizen Voice &amp; Service Portal</div>
+          <h1 class="page-banner-title">市長信箱／線上申辦與進度查詢</h1>
+          <p class="page-banner-desc">
             重視每一位市民的心聲！提供便捷安全的多步驟陳情建議表單、手機簡訊驗證與案件即時進度時間軸追蹤。
           </p>
         </div>
@@ -159,7 +159,7 @@
                 </div>
               </div>
 
-              <div style="text-align: right; margin-top: 1.5rem;">
+              <div class="form-actions form-actions-end">
                 <button type="button" class="btn btn-primary form-next-step-btn">
                   下一步：填寫具體詳情與地點
                   <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -177,16 +177,16 @@
 
                 <div class="form-group full-width">
                   <label class="form-label" for="caseLocation">具體發生地點或鄰近門牌地址 <span class="required-star">*</span></label>
-                  <div style="display: flex; gap: 0.5rem;">
+                  <div class="form-inline-row">
                     <input type="text" class="form-control" id="caseLocation" placeholder="例如：民德市中央區市政大道一段 120 號前" required>
-                    <button type="button" class="btn btn-secondary" id="mailboxGpsBtn" style="white-space: nowrap;">
+                    <button type="button" class="btn btn-secondary" id="mailboxGpsBtn">
                       定位目前位置
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+              <div class="form-actions">
                 <button type="button" class="btn btn-secondary form-prev-step-btn">上一步</button>
                 <button type="button" class="btn btn-primary form-next-step-btn">
                   下一步：上傳佐證檔案
@@ -214,7 +214,7 @@
                 <div class="file-list-preview" id="fileListPreview"></div>
               </div>
 
-              <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+              <div class="form-actions">
                 <button type="button" class="btn btn-secondary form-prev-step-btn">上一步</button>
                 <button type="button" class="btn btn-primary form-next-step-btn">
                   下一步：填寫聯絡人身分驗證
@@ -258,7 +258,7 @@
                 </div>
               </div>
 
-              <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+              <div class="form-actions form-actions-lg">
                 <button type="button" class="btn btn-secondary form-prev-step-btn">上一步</button>
                 <button type="button" class="btn btn-primary" id="submitMailboxBtn">確認送出通報案件</button>
               </div>

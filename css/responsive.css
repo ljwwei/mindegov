@@ -1,10 +1,113 @@
 /**
  * 民德市政府官網 - 響應式與無障礙列印樣式 (Responsive & Print Media Queries)
  * 智慧民德．幸福永續
+ *
+ * 版面策略：電腦版與手機版各自獨立排版，內容完全相同、不隱藏任何資訊。
+ *   ≥ 1201px   桌機 (Desktop)   : 完整導覽列、懸浮式數據看板
+ *   993-1200   筆電 (Laptop)    : 精簡導覽列、搜尋縮為圖示
+ *   ≤ 992px    平板 (Tablet)    : 漢堡選單抽屜、雙欄卡片
+ *   ≤ 768px    手機 (Phone)     : App 式單欄、橫向滑動分類、底部彈出視窗
+ *   ≤ 480px    小螢幕手機       : 更緊湊的間距與全寬按鈕
  */
 
 /* ========================================================
-   桌面與筆電螢幕適配 (1200px 以下)
+   通用：錨點捲動位移 (避免被置頂導覽列遮住)
+   ======================================================== */
+main section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* 導覽文字、品牌名稱一律不換行 */
+.nav-link,
+.brand-text {
+  white-space: nowrap;
+}
+
+/* 輪播頁填滿輪播容器最小高度 (避免圖片下方露出深色底) */
+.hero-slide.active {
+  min-height: inherit;
+}
+
+.quick-search-trigger {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ========================================================
+   桌機 (1201px 以上) —— 電腦版專屬版面
+   ======================================================== */
+@media (min-width: 1201px) {
+  .container {
+    padding: 0 2rem;
+  }
+
+  .hero-slider {
+    min-height: 580px;
+  }
+
+  .hero-content {
+    padding: 5rem 0 7rem;
+  }
+
+  /* 輪播控制鍵上移，避開懸浮的數據看板 */
+  .slider-controls {
+    bottom: 5.25rem;
+    right: max(2rem, calc((100vw - 1280px) / 2 + 2rem));
+  }
+
+  /* 市政績效數據看板：懸浮卡片壓在英雄區底部 */
+  .civic-stats-bar {
+    background: transparent;
+    border-bottom: none;
+    box-shadow: none;
+    padding: 0;
+    margin-top: -3rem;
+    position: relative;
+    z-index: 5;
+  }
+
+  .civic-stats-bar .stats-grid {
+    background: var(--gov-navy);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: 1.25rem 0.75rem;
+    gap: 0;
+  }
+
+  .services-section {
+    padding-top: 6rem;
+  }
+}
+
+/* ========================================================
+   超大螢幕 (1600px 以上) —— 內容寬度加寬，容納完整搜尋框
+   ======================================================== */
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1440px;
+  }
+}
+
+/* ========================================================
+   一般桌機 (1599px 以下) —— 搜尋鈕縮為圓形圖示
+   ======================================================== */
+@media (max-width: 1599px) {
+  .quick-search-trigger {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .quick-search-trigger span,
+  .quick-search-key {
+    display: none;
+  }
+}
+
+/* ========================================================
+   筆電 (1200px 以下) —— 精簡導覽列，避免擠壓換行
    ======================================================== */
 @media (max-width: 1200px) {
   .services-grid {
@@ -15,142 +118,390 @@
     grid-template-columns: 1.5fr 1fr 1fr 1fr;
     gap: 2rem;
   }
+
+  .nav-list {
+    gap: 0.15rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.65rem;
+    font-size: 0.92rem;
+  }
+
+  .nav-link.active::after {
+    left: 0.65rem;
+    right: 0.65rem;
+  }
+}
+
+/* 筆電中等寬度：導覽圖示隱藏，僅保留文字 */
+@media (min-width: 993px) and (max-width: 1100px) {
+  .nav-link svg {
+    display: none;
+  }
 }
 
 /* ========================================================
-   平板電腦橫向與縱向適配 (992px 以下)
+   平板 (992px 以下) —— 漢堡選單抽屜、雙欄卡片
    ======================================================== */
 @media (max-width: 992px) {
-  /* 導覽列轉換為行動版漢堡選單抽屜 */
-  .mobile-menu-toggle {
-    display: inline-flex;
+  .container {
+    padding: 0 1.25rem;
   }
 
+  /* ---- 導覽列：漢堡按鈕 + 向下展開的抽屜 ---- */
+  .header-container {
+    gap: 0.75rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+
+  .header-actions {
+    margin-left: auto;
+    gap: 0.5rem;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+  }
+
+  /* 漢堡 → ✕ 動畫 */
+  .mobile-menu-toggle svg line {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform var(--transition-normal), opacity var(--transition-fast);
+  }
+
+  .mobile-menu-toggle[aria-expanded="true"] svg line:nth-child(1) {
+    opacity: 0;
+  }
+
+  .mobile-menu-toggle[aria-expanded="true"] svg line:nth-child(2) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .mobile-menu-toggle[aria-expanded="true"] svg line:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* 抽屜貼齊置頂導覽列下緣；使用 absolute 以免受 backdrop-filter 影響定位 */
   .main-nav {
-    position: fixed;
-    top: 72px;
+    position: absolute;
+    top: 100%;
     left: 0;
+    right: 0;
     width: 100%;
-    height: calc(100vh - 72px);
+    height: auto;
+    max-height: calc(100vh - 76px);
+    max-height: calc(100dvh - 76px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--bg-surface);
     border-top: 1px solid var(--border-light);
-    padding: 1.5rem;
-    overflow-y: auto;
-    transform: translateX(-100%);
-    transition: transform var(--transition-normal);
+    border-bottom: 3px solid var(--gov-blue);
+    padding: 0.75rem 1.25rem 1.25rem;
     box-shadow: var(--shadow-xl);
     z-index: 998;
+    display: block;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform var(--transition-normal), opacity var(--transition-normal), visibility var(--transition-normal);
   }
 
   .main-nav.open {
-    transform: translateX(0);
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .nav-list {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .nav-list li {
+    width: 100%;
   }
 
   .nav-link {
-    padding: 0.85rem 1.25rem;
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    padding: 0.8rem 1rem;
     font-size: 1.05rem;
     border-radius: var(--radius-md);
+  }
+
+  .nav-link svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  .nav-link.active {
+    box-shadow: inset 4px 0 0 var(--gov-blue);
   }
 
   .nav-link.active::after {
     display: none;
   }
 
-  /* 績效看板轉為 2 欄 */
+  /* ---- 區塊節奏 ---- */
+  .services-section,
+  .announcements-section,
+  .events-section,
+  .departments-section,
+  .mailbox-section {
+    padding: 4rem 0;
+  }
+
+  .section-header {
+    margin-bottom: 2.25rem;
+  }
+
+  /* ---- 績效看板：2 × 2 卡片 ---- */
+  .civic-stats-bar {
+    padding: 1.25rem 0;
+  }
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
   }
 
-  .stat-item:nth-child(2) {
-    border-right: none;
+  .civic-stats-bar .stats-grid .stat-item {
+    border: none;
+    padding: 0.9rem 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
   }
 
-  /* 局處介紹卡片轉為 1 欄 */
-  .departments-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* 便民服務卡片轉為 2 欄 */
+  /* ---- 卡片網格 ---- */
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.1rem;
   }
 
-  /* 活動卡片轉為 2 欄 */
   .events-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
   }
 
-  /* 頁尾轉為 2 欄 */
-  .footer-grid {
+  .departments-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
+    gap: 1.25rem;
   }
 
-  /* 公告工具列垂直排列 */
+  .department-card {
+    padding: 1.4rem;
+  }
+
+  /* ---- 工具列：垂直排列 ---- */
   .announcement-toolbar {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .announcement-search-box {
+  .announcement-search-box,
+  .dept-search-box {
     width: 100%;
   }
 
-  .dept-search-box {
-    width: 100%;
+  .departments-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* ---- 頁尾 ---- */
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  /* ---- 內頁橫幅 ---- */
+  .page-banner {
+    padding: 2.75rem 0;
+    margin-bottom: 2.25rem;
+  }
+
+  .page-banner-title {
+    font-size: 2rem;
   }
 }
 
 /* ========================================================
-   智慧型手機適配 (768px 以下)
+   手機 (768px 以下) —— 手機專屬 App 式版面
    ======================================================== */
 @media (max-width: 768px) {
-  /* 頂端公務列簡化 */
-  .top-utility-bar .utility-left {
-    display: none;
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  /* ---- 頂端公務列：資訊完整保留，分列顯示 ---- */
+  .top-utility-bar {
+    font-size: 0.8rem;
   }
 
   .top-utility-bar .container {
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
-  /* 輪播主視覺文字適配 */
+  .utility-left {
+    flex-wrap: wrap;
+    gap: 0.2rem 1rem;
+    line-height: 1.5;
+  }
+
+  .utility-left .utility-item {
+    flex-wrap: wrap;
+    gap: 0.3rem 0.5rem;
+  }
+
+  /* 無障礙／工具列：單列橫向滑動，不換行、不遺失任何功能 */
+  .utility-right {
+    gap: 0.6rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .utility-right::-webkit-scrollbar {
+    display: none;
+  }
+
+  .utility-right > *,
+  .accessibility-tools {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .font-size-btn {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.78rem;
+  }
+
+  .contrast-toggle-btn {
+    padding: 0.3rem 0.7rem;
+  }
+
+  /* ---- 快訊跑馬燈 ---- */
+  .emergency-ticker {
+    font-size: 0.82rem;
+    padding: 0.35rem 0;
+  }
+
+  .ticker-tag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    margin-right: 0.6rem;
+  }
+
+  .ticker-close {
+    margin-left: 0.4rem;
+    padding: 0.35rem;
+  }
+
+  /* ---- 導覽列 ---- */
+  .brand-title {
+    font-size: 1.3rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.68rem;
+  }
+
+  .brand-emblem {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* ---- 英雄輪播：垂直漸層遮罩、控制鍵置底置中 ---- */
   .hero-slider {
-    min-height: 480px;
+    min-height: 460px;
+  }
+
+  .slide-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(7, 30, 61, 0.6) 0%,
+      rgba(7, 30, 61, 0.88) 100%
+    );
   }
 
   .hero-content {
-    padding: 3rem 0;
+    padding: 2.5rem 0 5.5rem;
+  }
+
+  .slide-tag {
+    font-size: 0.78rem;
+    margin-bottom: 1rem;
   }
 
   .slide-title {
-    font-size: 2rem;
+    font-size: 1.85rem;
+    line-height: 1.3;
+    margin-bottom: 0.9rem;
   }
 
   .slide-desc {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    margin-bottom: 1.4rem;
   }
 
-  .section-title {
-    font-size: 1.75rem;
+  .slide-actions {
+    gap: 0.65rem;
   }
 
-  /* 績效看板轉為 1 欄或更緊湊 */
+  .slide-actions .btn {
+    flex: 1 1 auto;
+  }
+
+  .slider-controls {
+    bottom: 1rem;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 0.5rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .slider-arrow-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* ---- 績效看板：直式小卡片 ---- */
+  .civic-stats-bar {
+    padding: 1rem 0;
+  }
+
   .stats-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    gap: 0.65rem;
   }
 
-  .stat-item {
-    padding: 0.4rem;
-    border-right: none;
+  .civic-stats-bar .stats-grid .stat-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+    padding: 0.85rem;
   }
 
   .stat-icon {
@@ -158,66 +509,315 @@
     height: 36px;
   }
 
+  .stat-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
   .stat-value {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
   }
 
-  /* 便民服務轉為 1 欄 */
+  .stat-label {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  /* ---- 區塊標題 ---- */
+  .services-section,
+  .announcements-section,
+  .events-section,
+  .departments-section,
+  .mailbox-section {
+    padding: 3rem 0;
+  }
+
+  .section-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .section-tag {
+    font-size: 0.74rem;
+  }
+
+  .section-title {
+    font-size: 1.55rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* ---- 分類標籤：單列橫向滑動 (邊到邊) ---- */
+  .category-filter-pills,
+  .announcement-tabs,
+  .dept-category-tabs {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding: 0.15rem 1rem 0.5rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .category-filter-pills::-webkit-scrollbar,
+  .announcement-tabs::-webkit-scrollbar,
+  .dept-category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-filter-pills {
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-pill,
+  .announcement-tab,
+  .dept-cat-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    scroll-snap-align: start;
+    min-height: 40px;
+  }
+
+  .announcement-tab {
+    background: var(--bg-surface-raised);
+    border: 1px solid var(--border-light);
+  }
+
+  .announcement-toolbar {
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+  }
+
+  .departments-filter-bar {
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .announcement-search-box,
+  .dept-search-box {
+    padding: 0.5rem 0.85rem;
+  }
+
+  /* ---- 便民服務卡片 ---- */
   .services-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+    margin-bottom: 2rem;
   }
 
-  /* 市府活動轉為 1 欄 */
-  .events-grid {
-    grid-template-columns: 1fr;
+  .service-card {
+    padding: 1.1rem 1rem;
   }
 
-  /* 最新公告條目響應式換行 */
+  .service-card-top {
+    margin-bottom: 0.85rem;
+  }
+
+  .service-icon-box {
+    width: 42px;
+    height: 42px;
+  }
+
+  .service-title {
+    font-size: 1.02rem;
+  }
+
+  .service-desc {
+    font-size: 0.84rem;
+    margin-bottom: 1rem;
+  }
+
+  /* ---- 常用快捷工具條：標題置頂、按鈕雙欄 ---- */
+  .quick-tools-strip {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.1rem 1rem;
+    gap: 0.9rem;
+  }
+
+  .quick-tools-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .quick-tool-btn {
+    justify-content: flex-start;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.84rem;
+    line-height: 1.35;
+    text-align: left;
+  }
+
+  /* ---- 最新公告：標籤＋標題在上，日期資訊在下 ---- */
   .announcement-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.6rem;
-    padding: 1rem;
+    padding: 0.95rem 1rem;
   }
 
   .announcement-main {
     width: 100%;
     flex-wrap: wrap;
+    align-items: flex-start;
     gap: 0.5rem;
   }
 
   .announcement-title {
     white-space: normal;
-    font-size: 0.95rem;
+    overflow: visible;
+    font-size: 0.97rem;
+    line-height: 1.5;
     width: 100%;
+    flex: 1 1 100%;
   }
 
   .announcement-meta {
     margin-left: 0;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
     font-size: 0.8rem;
+    padding-top: 0.55rem;
+    border-top: 1px dashed var(--border-light);
   }
 
-  /* 市長信箱表單 */
+  .announcement-footer {
+    margin-top: 1.5rem;
+  }
+
+  /* ---- 市府活動 ---- */
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .event-media {
+    height: 190px;
+  }
+
+  .event-body {
+    padding: 1.25rem;
+  }
+
+  .event-title {
+    font-size: 1.12rem;
+  }
+
+  /* ---- 局處介紹 ---- */
+  .departments-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .department-card {
+    padding: 1.25rem;
+  }
+
+  .dept-name {
+    font-size: 1.2rem;
+  }
+
+  .dept-header {
+    gap: 0.6rem;
+  }
+
+  /* ---- 市長信箱：App 式底部頁籤 ---- */
+  .mailbox-card-wrapper {
+    border-radius: var(--radius-md);
+  }
+
+  .mailbox-tab-btn {
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.8rem 0.35rem;
+    font-size: 0.8rem;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .mailbox-tab-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+
   .mailbox-tab-pane {
-    padding: 1.5rem 1rem;
+    padding: 1.35rem 1rem;
+  }
+
+  /* 步驟進度條：四等分，保留所有步驟名稱 */
+  .form-stepper {
+    margin-bottom: 1.75rem;
+  }
+
+  .form-stepper::before {
+    left: 12.5%;
+    right: 12.5%;
+  }
+
+  .stepper-step {
+    flex: 1;
+    text-align: center;
+  }
+
+  .step-label {
+    display: block;
+    font-size: 0.72rem;
   }
 
   .form-grid {
     grid-template-columns: 1fr;
+    gap: 1.1rem;
   }
 
   .form-group.full-width {
     grid-column: span 1;
   }
 
-  .form-stepper {
-    margin-bottom: 2rem;
+  /* 輸入欄位 16px：避免 iOS Safari 聚焦時自動放大頁面 */
+  .form-control,
+  .announcement-search-box input,
+  .dept-search-box input,
+  #globalSearchInput {
+    font-size: 16px;
   }
 
-  .step-label {
-    display: none;
+  .form-control {
+    padding: 0.8rem 0.95rem;
+  }
+
+  .form-inline-row {
+    flex-direction: column;
+  }
+
+  .form-actions,
+  .form-actions-end {
+    flex-direction: column-reverse;
+    gap: 0.65rem;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+
+  .file-dropzone {
+    padding: 1.5rem 1rem;
+  }
+
+  .captcha-row {
+    flex-wrap: wrap;
+  }
+
+  .captcha-row .send-code-btn {
+    width: 100%;
   }
 
   .inquiry-search-bar {
@@ -226,36 +826,154 @@
 
   .sample-case-chips {
     flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
-  /* 頁尾單欄排列 */
+  .case-result-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .case-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .timeline-stepper {
+    padding-left: 2.25rem;
+  }
+
+  .timeline-dot {
+    left: -2.25rem;
+  }
+
+  .case-official-reply {
+    padding: 1rem 1.1rem;
+  }
+
+  /* ---- 彈出視窗：底部彈出的 Bottom Sheet ---- */
+  .modal-backdrop {
+    padding: 0.75rem 0.75rem 0;
+    align-items: flex-end;
+  }
+
+  .modal-dialog {
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .modal-header {
+    padding: 1rem 1.1rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-close-btn {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  .modal-body {
+    padding: 1.1rem;
+  }
+
+  .modal-footer {
+    padding: 0.85rem 1.1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ---- 頁尾：品牌與認證整列，兩組連結並排 ---- */
+  .main-footer {
+    padding-top: 2.5rem;
+    padding-bottom: 1.5rem;
+  }
+
   .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-brand,
+  .footer-badges {
+    grid-column: 1 / -1;
+  }
+
+  .footer-title {
+    margin-bottom: 0.9rem;
+  }
+
+  .footer-links {
+    gap: 0.5rem;
+    font-size: 0.88rem;
   }
 
   .footer-bottom {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.85rem;
+    padding-top: 1.5rem;
   }
 
   .footer-legal-links {
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.5rem 1.1rem;
   }
 
-  .quick-search-trigger span {
-    display: none;
+  /* ---- 內頁橫幅 ---- */
+  .page-main {
+    padding-top: 0;
   }
 
-  .quick-search-key {
-    display: none;
+  .page-banner {
+    padding: 2.25rem 0;
+    margin-bottom: 1.75rem;
+  }
+
+  .page-banner-eyebrow {
+    font-size: 0.74rem;
+  }
+
+  .page-banner-title {
+    font-size: 1.55rem;
+  }
+
+  .page-banner-desc {
+    font-size: 0.97rem;
+  }
+
+  .page-content,
+  .page-main-padded {
+    padding-bottom: 3rem;
+  }
+
+  /* ---- 懸浮元件 ---- */
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .back-to-top {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  /* 觸控裝置不需要滑鼠懸停位移 */
+  .announcement-item:hover,
+  .service-card:hover,
+  .event-card:hover,
+  .department-card:hover {
+    transform: none;
   }
 }
 
 /* ========================================================
-   極窄型手機螢幕適配 (480px 以下)
+   小螢幕手機 (480px 以下)
    ======================================================== */
 @media (max-width: 480px) {
   .brand-title {
@@ -280,18 +998,36 @@
     width: 100%;
   }
 
+  .slide-title {
+    font-size: 1.65rem;
+  }
+
+  /* 便民服務在小螢幕改為單欄，文字較舒適 */
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-tools-list {
+    grid-template-columns: 1fr;
+  }
+
   .quick-tools-strip {
     padding: 1rem;
   }
 
   .quick-tool-btn {
     width: 100%;
-    justify-content: center;
+  }
+}
+
+/* 極窄螢幕 (360px 以下)：頁尾連結改單欄、績效卡片縮小 */
+@media (max-width: 360px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
   }
 
-  .back-to-top {
-    bottom: 1rem;
-    right: 1rem;
+  .stat-value {
+    font-size: 1.05rem;
   }
 }
 
