@@ -348,11 +348,57 @@ main section[id] {
     padding: 0 1rem;
   }
 
-  /* ---- 頂端公務列：純粹、精緻的即時時間與氣候狀態列 (字級等無障礙工具移至漢堡選單內，解除雜亂) ---- */
+  /* ========================================================
+     手機頂端排版重整：由上往下依序為
+     1. 即時市政快訊 (.emergency-ticker)
+     2. Logo 導覽區塊 (.main-header)
+     3. 時間與氣溫 AQI 區塊 (.top-utility-bar)
+     ======================================================== */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .skip-link {
+    order: 0;
+  }
+
+  .emergency-ticker {
+    order: 1;
+    font-size: 0.82rem;
+    padding: 0.35rem 0;
+  }
+
+  .main-header {
+    order: 2;
+  }
+
+  /* ---- 頂端公務列：時間與氣溫 AQI 狀態列 (排在 Logo 區塊下方) ---- */
   .top-utility-bar {
+    order: 3;
     padding: 0.4rem 0;
     font-size: 0.78rem;
     background-color: var(--gov-navy-deep);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    z-index: 10;
+  }
+
+  main,
+  #mainContent {
+    order: 4;
+  }
+
+  footer,
+  #footer {
+    order: 5;
+  }
+
+  .back-to-top,
+  .toast-container,
+  .modal-backdrop {
+    order: 6;
   }
 
   .top-utility-bar .container {
@@ -436,8 +482,9 @@ main section[id] {
     display: none !important;
   }
 
-  /* ---- 快訊跑馬燈 ---- */
+  /* ---- 快訊跑馬燈 (置於手機版最頂端) ---- */
   .emergency-ticker {
+    order: 1;
     font-size: 0.82rem;
     padding: 0.35rem 0;
   }
