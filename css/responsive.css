@@ -348,57 +348,60 @@ main section[id] {
     padding: 0 1rem;
   }
 
-  /* ---- 頂端公務列：資訊完整保留，分列顯示 ---- */
+  /* ---- 頂端公務列：純粹、精緻的即時時間與氣候狀態列 (字級等無障礙工具移至漢堡選單內，解除雜亂) ---- */
   .top-utility-bar {
-    font-size: 0.8rem;
+    padding: 0.4rem 0;
+    font-size: 0.78rem;
+    background-color: var(--gov-navy-deep);
   }
 
   .top-utility-bar .container {
     flex-direction: column;
-    align-items: stretch;
-    gap: 0.4rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    gap: 0.25rem;
   }
 
-  .utility-left {
+  .top-utility-bar .utility-left {
+    display: flex;
     flex-wrap: wrap;
-    gap: 0.2rem 1rem;
-    line-height: 1.5;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem 0.85rem;
+    width: 100%;
+    text-align: center;
+    line-height: 1.4;
   }
 
-  .utility-left .utility-item {
+  .top-utility-bar .utility-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.76rem;
+    color: #cbd5e1;
     flex-wrap: wrap;
-    gap: 0.3rem 0.5rem;
+    justify-content: center;
   }
 
-  /* 無障礙／工具列：單列橫向滑動，不換行、不遺失任何功能 */
-  .utility-right {
-    gap: 0.6rem;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 2px;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .utility-right::-webkit-scrollbar {
-    display: none;
-  }
-
-  .utility-right > *,
-  .accessibility-tools {
+  .top-utility-bar .utility-item svg {
+    width: 13px;
+    height: 13px;
     flex-shrink: 0;
-    white-space: nowrap;
   }
 
-  .font-size-btn {
-    padding: 0.3rem 0.65rem;
-    font-size: 0.78rem;
+  .top-utility-bar .weather-badge {
+    font-size: 0.72rem;
+    padding: 0.1rem 0.55rem;
   }
 
-  .contrast-toggle-btn {
-    padding: 0.3rem 0.7rem;
+  .top-utility-bar .weather-time {
+    font-size: 0.72rem;
+  }
+
+  /* 移除手機頂端礙眼的字級與工具按鈕整行 (已完整收錄至漢堡選單內) */
+  .top-utility-bar .utility-right {
+    display: none !important;
   }
 
   /* ---- 快訊跑馬燈 ---- */
@@ -418,13 +421,18 @@ main section[id] {
     padding: 0.35rem;
   }
 
-  /* ---- 導覽列 ---- */
+  /* ---- 官方標誌：中英對齊，比例完美縮放且英文絕不消失 ---- */
   .brand-title {
-    font-size: 1.3rem;
+    font-size: 1.28rem;
+    letter-spacing: 0.14em;
+    line-height: 1.15;
   }
 
   .brand-subtitle {
-    font-size: 0.68rem;
+    font-size: 0.515rem;
+    letter-spacing: 0.062em;
+    line-height: 1.15;
+    display: block;
   }
 
   .brand-emblem {
@@ -549,9 +557,8 @@ main section[id] {
     line-height: 1.6;
   }
 
-  /* ---- 分類標籤：單列橫向滑動 (邊到邊) ---- */
+  /* ---- 便民服務與局處分類：邊到邊橫向滑動 ---- */
   .category-filter-pills,
-  .announcement-tabs,
   .dept-category-tabs {
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -565,7 +572,6 @@ main section[id] {
   }
 
   .category-filter-pills::-webkit-scrollbar,
-  .announcement-tabs::-webkit-scrollbar,
   .dept-category-tabs::-webkit-scrollbar {
     display: none;
   }
@@ -575,7 +581,6 @@ main section[id] {
   }
 
   .filter-pill,
-  .announcement-tab,
   .dept-cat-btn {
     flex-shrink: 0;
     white-space: nowrap;
@@ -583,15 +588,40 @@ main section[id] {
     min-height: 40px;
   }
 
+  /* 最新市政公告 6 大分類標籤：採 3 欄 × 2 排等寬對齊網格，徹底解決招標採購與徵才快訊凸出破版問題 */
+  .announcement-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.45rem !important;
+    width: 100% !important;
+    margin: 0 0 0.75rem 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
   .announcement-tab {
+    width: 100% !important;
+    min-height: 42px !important;
+    padding: 0.45rem 0.2rem !important;
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
     background: var(--bg-surface-raised);
     border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
   }
 
   .announcement-toolbar {
     gap: 0.5rem;
     margin-bottom: 1.25rem;
     padding-bottom: 1rem;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .departments-filter-bar {
@@ -977,16 +1007,21 @@ main section[id] {
    ======================================================== */
 @media (max-width: 480px) {
   .brand-title {
-    font-size: 1.2rem;
+    font-size: 1.16rem;
+    letter-spacing: 0.14em;
+    line-height: 1.15;
   }
 
   .brand-subtitle {
-    display: none;
+    font-size: 0.47rem;
+    letter-spacing: 0.062em;
+    line-height: 1.15;
+    display: block; /* 英文絕不隱藏，與中文長度相同對齊 */
   }
 
   .brand-emblem {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
   }
 
   .btn {

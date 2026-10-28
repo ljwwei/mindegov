@@ -1862,3 +1862,131 @@ textarea.form-control {
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+/* ========================================================
+   14. 行動版選單專屬無障礙與網站設定面板 (Mobile Drawer Tools)
+   ======================================================== */
+.mobile-nav-tools {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .mobile-nav-tools {
+    display: block;
+    margin-top: 1.25rem;
+    padding: 1.1rem;
+    background: var(--bg-surface-raised);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+  }
+
+  .mobile-tools-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gov-navy);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.85rem;
+  }
+
+  [data-theme="contrast"] .mobile-tools-header {
+    color: var(--text-main);
+  }
+
+  .mobile-tools-header svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--gov-cyan);
+  }
+
+  .mobile-tools-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .mobile-font-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed var(--border-light);
+  }
+
+  .mobile-tools-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-sub);
+  }
+
+  .mobile-nav-tools .accessibility-tools {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .mobile-nav-tools .font-size-btn {
+    background: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--border-medium);
+    padding: 0.25rem 0.65rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .mobile-nav-tools .font-size-btn:hover,
+  .mobile-nav-tools .font-size-btn.active {
+    background: var(--gov-blue);
+    color: #ffffff;
+    border-color: var(--gov-blue);
+  }
+
+  .mobile-actions-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .mobile-actions-row .contrast-toggle-btn,
+  .mobile-aux-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-main);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .mobile-actions-row .contrast-toggle-btn svg,
+  .mobile-aux-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    flex-shrink: 0;
+  }
+
+  .mobile-actions-row .contrast-toggle-btn:hover,
+  .mobile-aux-btn:hover {
+    border-color: var(--gov-blue);
+    color: var(--gov-blue);
+    background: var(--gov-blue-subtle);
+  }
+}
+

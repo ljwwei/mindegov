@@ -164,15 +164,15 @@ function initAccessibility() {
   }
 
   // 高對比無障礙模式切換
-  const contrastBtn = document.getElementById('contrastToggleBtn');
+  const contrastBtns = document.querySelectorAll('#contrastToggleBtn, .contrast-toggle-btn');
   const savedTheme = localStorage.getItem('mindegov_theme');
 
   if (savedTheme === 'contrast') {
     document.documentElement.setAttribute('data-theme', 'contrast');
   }
 
-  if (contrastBtn) {
-    contrastBtn.addEventListener('click', () => {
+  contrastBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       if (currentTheme === 'contrast') {
         document.documentElement.removeAttribute('data-theme');
@@ -184,7 +184,7 @@ function initAccessibility() {
         showToast('已啟用高對比無障礙模式', 'info');
       }
     });
-  }
+  });
 
   // 緊急跑馬燈關閉按鈕
   const tickerClose = document.getElementById('tickerCloseBtn');
