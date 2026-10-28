@@ -557,9 +557,8 @@ main section[id] {
     line-height: 1.6;
   }
 
-  /* ---- 便民服務與局處分類：邊到邊橫向滑動 ---- */
-  .category-filter-pills,
-  .dept-category-tabs {
+  /* ---- 便民服務分類：邊到邊橫向滑動 ---- */
+  .category-filter-pills {
     flex-wrap: nowrap;
     justify-content: flex-start;
     overflow-x: auto;
@@ -569,19 +568,14 @@ main section[id] {
     scroll-snap-type: x proximity;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-  }
-
-  .category-filter-pills::-webkit-scrollbar,
-  .dept-category-tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .category-filter-pills {
     margin-bottom: 1.5rem;
   }
 
-  .filter-pill,
-  .dept-cat-btn {
+  .category-filter-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-pill {
     flex-shrink: 0;
     white-space: nowrap;
     scroll-snap-align: start;
@@ -624,9 +618,44 @@ main section[id] {
     align-items: stretch;
   }
 
+  /* 各局處介紹 5 大分類標籤：採第一列全寬主分類 + 雙欄對稱網格，徹底解決右側凸出與截斷問題 */
+  .dept-category-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.45rem !important;
+    width: 100% !important;
+    margin: 0 0 0.75rem 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .dept-cat-btn {
+    width: 100% !important;
+    min-height: 42px !important;
+    padding: 0.45rem 0.25rem !important;
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    background: var(--bg-surface-raised);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+  }
+
+  .dept-cat-btn:first-child {
+    grid-column: span 2 !important;
+    font-size: 0.92rem !important;
+  }
+
   .departments-filter-bar {
     gap: 0.75rem;
     margin-bottom: 1.5rem;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .announcement-search-box,
@@ -758,6 +787,17 @@ main section[id] {
 
   .dept-header {
     gap: 0.6rem;
+  }
+
+  .dept-contact-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .dept-contact-bar .btn {
+    width: 100%;
+    justify-content: center;
   }
 
   /* ---- 市長信箱：App 式底部頁籤 ---- */
@@ -909,6 +949,12 @@ main section[id] {
 
   .modal-body {
     padding: 1.1rem;
+  }
+
+  .dept-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1rem;
   }
 
   .modal-footer {

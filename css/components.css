@@ -1055,6 +1055,17 @@
   stroke: currentColor;
 }
 
+.dept-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  background: var(--bg-surface-raised);
+  padding: 1.25rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
 /* ========================================================
    6. 市長信箱與線上申辦 (Mayor's Mailbox & Application Form)
    ======================================================== */

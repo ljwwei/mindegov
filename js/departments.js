@@ -137,7 +137,7 @@ function openDepartmentModal(deptId) {
       <div style="font-size: 1.05rem; font-weight: 700; color: var(--gov-navy);">“${dept.motto}”</div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: var(--bg-surface-raised); padding: 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; font-size: 0.9rem;">
+    <div class="dept-modal-grid">
       <div>
         <span style="color: var(--text-muted);">局長首長：</span>
         <strong style="color: var(--gov-navy);">${dept.chief}</strong>
