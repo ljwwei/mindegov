@@ -357,31 +357,46 @@ main section[id] {
 
   .top-utility-bar .container {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     padding: 0 1rem;
-    gap: 0.25rem;
+    gap: 0;
   }
 
+  /* 兩列等寬上下堆疊：第一列時間、第二列氣溫＋AQI */
   .top-utility-bar .utility-left {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     justify-content: center;
-    gap: 0.25rem 0.85rem;
+    gap: 0.3rem;
     width: 100%;
-    text-align: center;
+    max-width: 22rem;
+    margin: 0 auto;
     line-height: 1.4;
   }
 
   .top-utility-bar .utility-item {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 0.35rem;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+    width: 100%;
+    min-height: 1.9rem;
+    padding: 0.2rem 0.65rem;
+    box-sizing: border-box;
     font-size: 0.76rem;
     color: #cbd5e1;
-    flex-wrap: wrap;
-    justify-content: center;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-full, 999px);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .top-utility-bar .utility-item > span {
+    white-space: nowrap;
   }
 
   .top-utility-bar .utility-item svg {
@@ -397,6 +412,23 @@ main section[id] {
 
   .top-utility-bar .weather-time {
     font-size: 0.72rem;
+  }
+
+  @media (max-width: 360px) {
+    .top-utility-bar .utility-item {
+      font-size: 0.7rem;
+      gap: 0.3rem;
+      padding: 0.2rem 0.45rem;
+    }
+
+    .top-utility-bar .weather-badge,
+    .top-utility-bar .weather-time {
+      font-size: 0.66rem;
+    }
+
+    .top-utility-bar .weather-badge {
+      padding: 0.1rem 0.4rem;
+    }
   }
 
   /* 移除手機頂端礙眼的字級與工具按鈕整行 (已完整收錄至漢堡選單內) */
