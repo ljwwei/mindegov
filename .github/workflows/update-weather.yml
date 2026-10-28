@@ -2,9 +2,10 @@ name: Update weather data
 
 on:
   schedule:
-    # 避開整點/整十分的高峰時段，GitHub 對這些時間點常延遲或略過；
-    # 每 10 分鐘一次，即使部分排程被丟棄，仍有其他時段補上
-    - cron: '3,13,23,33,43,53 * * * *'
+    # 備援觸發：GitHub 的 cron 在尖峰時段常被延遲數小時甚至整批略過，
+    # 因此主要更新靠下方「自我接力」(每輪跑約 25 分鐘後自動觸發下一輪)，
+    # cron 只負責在接力中斷時重新啟動。
+    - cron: '7,27,47 * * * *'
   push:
     branches: [main]
     paths:
@@ -14,7 +15,9 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
+# 同時只跑一個；排隊中的舊請求會被新的取代，因此接力鏈不會重複膨脹
 concurrency:
   group: update-weather
   cancel-in-progress: false
@@ -22,26 +25,35 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Fetch CWA temperature and MOENV AQI
+      - name: Fetch loop (CWA temperature + MOENV AQI every 5 min)
         env:
           CWA_API_KEY: ${{ secrets.CWA_API_KEY }}
           MOENV_API_KEY: ${{ secrets.MOENV_API_KEY }}
-        run: node scripts/fetch-weather.mjs
-      - name: Commit if changed
         run: |
           git config user.name "weather-bot"
           git config user.email "weather-bot@users.noreply.github.com"
-          git add data/weather.json
-          git diff --cached --quiet && exit 0
-          git commit -m "chore: update weather data"
-          for i in 1 2 3; do
-            git pull --rebase && git push && exit 0
-            sleep $((i * 3))
+          ROUNDS=5
+          for r in $(seq 1 $ROUNDS); do
+            node scripts/fetch-weather.mjs || echo "fetch failed (round $r)"
+            git add data/weather.json
+            if ! git diff --cached --quiet; then
+              git commit -m "chore: update weather data"
+              for i in 1 2 3; do
+                git pull --rebase && git push && break
+                sleep $((i * 3))
+              done
+            fi
+            [ "$r" -lt "$ROUNDS" ] && sleep 300
           done
-          exit 1
+          exit 0
+      - name: Chain next run
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update-weather.yml --ref "${{ github.ref_name }}" || true
