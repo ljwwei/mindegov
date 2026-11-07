@@ -417,32 +417,42 @@ main section[id] {
     justify-content: center;
     gap: 0.3rem;
     width: 100%;
-    max-width: 22rem;
+    max-width: 100%;
     margin: 0 auto;
     line-height: 1.4;
   }
 
+  /* 外框高度隨內容自動撐開：AQI 文字較長 (如「對敏感族群不健康」) 時換行置中，外框同步變高 */
   .top-utility-bar .utility-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-wrap: nowrap;
-    gap: 0.4rem;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
     width: 100%;
+    height: auto;
     min-height: 1.9rem;
-    padding: 0.2rem 0.65rem;
+    padding: 0.3rem 0.75rem;
     box-sizing: border-box;
     font-size: 0.76rem;
     color: #cbd5e1;
-    white-space: nowrap;
+    text-align: center;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-full, 999px);
+    border-radius: 1.2rem;
     font-variant-numeric: tabular-nums;
   }
 
   .top-utility-bar .utility-item > span {
     white-space: nowrap;
+  }
+
+  /* AQI 徽章：整體不拆開，但在極窄螢幕仍可自行換行，避免超出外框 */
+  .top-utility-bar .utility-item > .weather-badge {
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    border-radius: 0.9rem;
   }
 
   .top-utility-bar .utility-item svg {

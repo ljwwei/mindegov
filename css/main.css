@@ -177,22 +177,26 @@ img {
 
 .top-utility-bar .container {
   display: flex;
+  flex-wrap: wrap;            /* 視窗較窄時右側工具列換到下一行，避免擠壓或超出 */
   justify-content: space-between;
   align-items: center;
+  gap: 0.3rem 1.25rem;
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
 }
 
 .utility-left {
   display: flex;
+  flex-wrap: wrap;            /* 時間與氣溫／AQI 空間不足時自動換行 */
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.2rem 1.25rem;
 }
 
 .utility-item {
   display: inline-flex;
+  flex-wrap: wrap;            /* AQI 文字變長時，外框隨內容撐開而非溢出 */
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.2rem 0.4rem;
 }
 
 .utility-item svg {
