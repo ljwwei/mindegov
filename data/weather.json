@@ -1,8 +1,8 @@
 {
   "temperature": 21.9,
-  "aqi": 103,
-  "aqiStatus": "對敏感族群不健康",
-  "updatedAt": "2026-11-09T12:06:22.429Z",
-  "aqiPublishTime": "2026/11/09 19:00:00",
+  "aqi": 93,
+  "aqiStatus": "普通",
+  "updatedAt": "2026-11-09T12:11:26.292Z",
+  "aqiPublishTime": "2026/11/09 20:00:00",
   "tempObsTime": "2026-11-09T19:50:00+08:00"
 }
