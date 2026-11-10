@@ -86,9 +86,20 @@ async function main() {
   else console.log('AQI 本小時資料已是最新或尚未到發布時間，略過抓取');
   await Promise.all(jobs);
 
+  // 資料內容 (不含 updatedAt) 沒變就不寫檔：避免無意義的 commit 觸發 GitHub Pages 重新部署，
+  // 部署佇列塞車正是網站上資料延遲的主因之一。
+  const strip = ({ updatedAt, ...rest }) => JSON.stringify(rest);
+  let old = {};
+  try { old = JSON.parse(await readFile(OUT, 'utf8')); } catch {}
+  if (strip(old) === strip(data)) {
+    console.log('資料無變動，略過寫入');
+    return;
+  }
+
   data.updatedAt = new Date().toISOString();
   await mkdir('data', { recursive: true });
   await writeFile(OUT, JSON.stringify(data, null, 2) + '\n');
+  console.log('已更新', data.tempObsTime, data.aqiPublishTime);
 }
 
 main();

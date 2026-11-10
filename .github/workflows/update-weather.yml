@@ -31,14 +31,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Fetch loop (CWA temperature + MOENV AQI every 5 min)
+      - name: Fetch loop (CWA temperature + MOENV AQI every 2 min)
         env:
           CWA_API_KEY: ${{ secrets.CWA_API_KEY }}
           MOENV_API_KEY: ${{ secrets.MOENV_API_KEY }}
         run: |
           git config user.name "weather-bot"
           git config user.email "weather-bot@users.noreply.github.com"
-          ROUNDS=5
+          # 每 2 分鐘檢查一次 (氣象署約每 10 分鐘出新資料，如此新資料最晚約 2 分鐘內就會被抓到)
+          ROUNDS=12
           for r in $(seq 1 $ROUNDS); do
             node scripts/fetch-weather.mjs || echo "fetch failed (round $r)"
             git add data/weather.json
@@ -49,7 +50,7 @@ jobs:
                 sleep $((i * 3))
               done
             fi
-            [ "$r" -lt "$ROUNDS" ] && sleep 300
+            [ "$r" -lt "$ROUNDS" ] && sleep 120
           done
           exit 0
       - name: Chain next run

@@ -101,12 +101,38 @@ function initLiveWeather() {
     return 5;
   }
 
-  // 資料由 GitHub Actions 定時抓取並寫入 data/weather.json (金鑰僅存在伺服器端)
+  // 資料由 GitHub Actions 定時抓取並寫入 data/weather.json (金鑰僅存在伺服器端)。
+  // GitHub Pages 每次 commit 都要重新部署且有 CDN 快取，常落後數分鐘到數十分鐘；
+  // 因此同時讀取 raw.githubusercontent.com (commit 後幾秒內即可取得) 與網站本身的檔案，取較新的一份。
+  const RAW_URL = 'https://raw.githubusercontent.com/ljwwei/mindegov/main/data/weather.json';
+
+  async function loadJson(url) {
+    const res = await fetch(`${url}?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(res.status);
+    return res.json();
+  }
+
+  function dataStamp(d) {
+    const a = Date.parse(d && d.tempObsTime) || 0;
+    const b = Date.parse(d && d.aqiPublishTime && String(d.aqiPublishTime).replace(/\//g, '-').replace(' ', 'T') + '+08:00') || 0;
+    const u = Date.parse(d && d.updatedAt) || 0;
+    return [a + b, u];
+  }
+
+  async function loadNewest() {
+    const results = await Promise.allSettled([loadJson(RAW_URL), loadJson('data/weather.json')]);
+    const ok = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+    if (!ok.length) throw new Error('all sources failed');
+    ok.sort((x, y) => {
+      const [xs, xu] = dataStamp(x), [ys, yu] = dataStamp(y);
+      return (ys - xs) || (yu - xu);
+    });
+    return ok[0];
+  }
+
   async function refresh() {
     try {
-      const res = await fetch(`data/weather.json?t=${Date.now()}`, { cache: 'no-store' });
-      if (!res.ok) throw new Error(res.status);
-      const d = await res.json();
+      const d = await loadNewest();
 
       const t = parseFloat(d.temperature);
       setTemp(isNaN(t) ? '--' : t.toFixed(1), isNaN(t) ? '' : formatDataTime(d.tempObsTime, true));
@@ -126,7 +152,7 @@ function initLiveWeather() {
   }
 
   refresh();
-  setInterval(refresh, 2 * 60 * 1000);
+  setInterval(refresh, 60 * 1000);
   // 分頁從背景切回前景時立即更新 (背景分頁的計時器會被瀏覽器延後)
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) refresh();
