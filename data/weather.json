@@ -2,7 +2,7 @@
   "temperature": 21.5,
   "aqi": 74,
   "aqiStatus": "普通",
-  "updatedAt": "2026-11-10T11:11:42.930Z",
+  "updatedAt": "2026-11-10T11:16:45.743Z",
   "aqiPublishTime": "2026/11/10 19:00:00",
-  "tempObsTime": "2026-11-10T18:50:00+08:00"
+  "tempObsTime": "2026-11-10T19:00:00+08:00"
 }
