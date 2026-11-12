@@ -1,10 +1,12 @@
 name: Update weather data
 
+# 由 Cloudflare Workers 每 10 分鐘發送 workflow_dispatch 精準喚醒；
+# 每次執行只跑單次 fetch，有變動才 commit，不再需要 24 小時常駐迴圈或自我接力。
+# GitHub 內建排程僅保留作為離線備援。
+
 on:
   schedule:
-    # 備援觸發：GitHub 的 cron 在尖峰時段常被延遲數小時甚至整批略過，
-    # 因此主要更新靠下方「自我接力」(每輪跑約 25 分鐘後自動觸發下一輪)，
-    # cron 只負責在接力中斷時重新啟動。
+    # 離線備援：若外部排程異常，每 20 分鐘檢查一次
     - cron: '7,27,47 * * * *'
   push:
     branches: [main]
@@ -15,9 +17,8 @@ on:
 
 permissions:
   contents: write
-  actions: write
 
-# 同時只跑一個；排隊中的舊請求會被新的取代，因此接力鏈不會重複膨脹
+# 同時只跑一個，排隊中只保留最新一個
 concurrency:
   group: update-weather
   cancel-in-progress: false
@@ -25,36 +26,31 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Fetch loop (CWA temperature + MOENV AQI every 2 min)
+      - name: Fetch and commit weather
         env:
           CWA_API_KEY: ${{ secrets.CWA_API_KEY }}
           MOENV_API_KEY: ${{ secrets.MOENV_API_KEY }}
         run: |
           git config user.name "weather-bot"
           git config user.email "weather-bot@users.noreply.github.com"
-          # 每 2 分鐘檢查一次 (氣象署約每 10 分鐘出新資料，如此新資料最晚約 2 分鐘內就會被抓到)
-          ROUNDS=12
-          for r in $(seq 1 $ROUNDS); do
-            node scripts/fetch-weather.mjs || echo "fetch failed (round $r)"
-            git add data/weather.json
-            if ! git diff --cached --quiet; then
-              git commit -m "chore: update weather data"
-              for i in 1 2 3; do
-                git pull --rebase && git push && break
-                sleep $((i * 3))
-              done
-            fi
-            [ "$r" -lt "$ROUNDS" ] && sleep 120
-          done
+
+          node scripts/fetch-weather.mjs || echo "fetch failed"
+
+          git add data/weather.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update weather data"
+            for i in 1 2 3; do
+              if git pull --rebase --autostash && git push; then
+                exit 0
+              fi
+              git rebase --abort 2>/dev/null || true
+              sleep $((i * 3))
+            done
+          fi
           exit 0
-      - name: Chain next run
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run update-weather.yml --ref "${{ github.ref_name }}" || true
