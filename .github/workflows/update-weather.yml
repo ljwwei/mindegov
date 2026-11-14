@@ -1,13 +1,9 @@
 name: Update weather data
 
-# 由 Cloudflare Workers 每 10 分鐘發送 workflow_dispatch 精準喚醒；
-# 每次執行只跑單次 fetch，有變動才 commit，不再需要 24 小時常駐迴圈或自我接力。
-# GitHub 內建排程僅保留作為離線備援。
+# 100% 由 Cloudflare Workers Cron 每 5 分鐘發送 workflow_dispatch 精準喚醒；
+# 每次執行只跑單次 fetch，有變動才 commit，不再需要 GitHub 內建 schedule 亦無需自我接力。
 
 on:
-  schedule:
-    # 離線備援：若外部排程異常，每 20 分鐘檢查一次
-    - cron: '7,27,47 * * * *'
   push:
     branches: [main]
     paths:
