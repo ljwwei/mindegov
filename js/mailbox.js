@@ -157,8 +157,8 @@ function validateCurrentStep(step) {
       notifyUser('請選擇案件陳情建議分類！', 'error');
       return false;
     }
-    if (!title || title.length < 5) {
-      notifyUser('請填寫具體的主旨說明（至少 5 個字）！', 'error');
+    if (!title) {
+      notifyUser('請填寫陳情主旨說明！', 'error');
       return false;
     }
     return true;
@@ -168,8 +168,8 @@ function validateCurrentStep(step) {
     const content = document.getElementById('caseContent')?.value.trim();
     const location = document.getElementById('caseLocation')?.value.trim();
 
-    if (!content || content.length < 15) {
-      notifyUser('請詳細描述具體事項與陳情內容（至少 15 個字）！', 'error');
+    if (!content) {
+      notifyUser('請填寫詳細案情與陳情內容！', 'error');
       return false;
     }
     if (!location) {
@@ -207,12 +207,12 @@ async function submitMailboxCase() {
   const content = document.getElementById('caseContent')?.value.trim();
   const location = document.getElementById('caseLocation')?.value.trim();
 
-  if (!category || !title || title.length < 5) {
+  if (!category || !title) {
     notifyUser('步驟 1 資料未完成，請先填寫分類與主旨！', 'error');
     goToStep(1);
     return;
   }
-  if (!content || content.length < 15 || !location) {
+  if (!content || !location) {
     notifyUser('步驟 2 資料未完成，請詳述案情內容與地點！', 'error');
     goToStep(2);
     return;
