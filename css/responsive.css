@@ -444,7 +444,9 @@ main section[id] {
   }
 
   .top-utility-bar .utility-item > span {
-    white-space: nowrap;
+    max-width: 100%;
+    white-space: normal;
+    line-height: 1.45;
   }
 
   /* AQI 徽章：整體不拆開，但在極窄螢幕仍可自行換行，避免超出外框 */
