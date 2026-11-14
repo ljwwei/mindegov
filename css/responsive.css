@@ -912,14 +912,14 @@ main section[id] {
     padding: 1.35rem 1rem;
   }
 
-  /* 步驟進度條：四等分，保留所有步驟名稱 */
+  /* 步驟進度條：三等分，保留所有步驟名稱 */
   .form-stepper {
     margin-bottom: 1.75rem;
   }
 
   .form-stepper::before {
-    left: 12.5%;
-    right: 12.5%;
+    left: 16.67%;
+    right: 16.67%;
   }
 
   .stepper-step {
@@ -967,25 +967,8 @@ main section[id] {
     width: 100%;
   }
 
-  .file-dropzone {
-    padding: 1.5rem 1rem;
-  }
-
-  .captcha-row {
-    flex-wrap: wrap;
-  }
-
-  .captcha-row .send-code-btn {
-    width: 100%;
-  }
-
   .inquiry-search-bar {
     flex-direction: column;
-  }
-
-  .sample-case-chips {
-    flex-wrap: wrap;
-    justify-content: flex-start;
   }
 
   .case-result-card {
@@ -1223,8 +1206,6 @@ main section[id] {
   .departments-filter-bar,
   .mailbox-nav-tabs,
   .form-stepper,
-  .file-dropzone,
-  .captcha-row .send-code-btn,
   .btn,
   .back-to-top,
   .toast-container,

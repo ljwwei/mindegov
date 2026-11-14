@@ -123,7 +123,7 @@
           <div class="page-banner-eyebrow">Citizen Voice &amp; Service Portal</div>
           <h1 class="page-banner-title">市長信箱／線上申辦與進度查詢</h1>
           <p class="page-banner-desc">
-            重視每一位市民的心聲！提供便捷安全的多步驟陳情建議表單、手機簡訊驗證與案件即時進度時間軸追蹤。
+            重視每一位市民的心聲！提供便捷安全的多步驟陳情建議表單、電子郵件雙向通知與案件即時進度時間軸追蹤。
           </p>
         </div>
       </div>
@@ -161,11 +161,7 @@
               </div>
               <div class="stepper-step" id="stepIndicator3">
                 <div class="step-circle">3</div>
-                <span class="step-label">照片事證</span>
-              </div>
-              <div class="stepper-step" id="stepIndicator4">
-                <div class="step-circle">4</div>
-                <span class="step-label">身分驗證</span>
+                <span class="step-label">聯絡與送出</span>
               </div>
             </div>
 
@@ -223,7 +219,7 @@
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary form-prev-step-btn">上一步</button>
                 <button type="button" class="btn btn-primary form-next-step-btn">
-                  下一步：上傳佐證檔案
+                  下一步：填寫聯絡與送出資訊
                   <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
               </div>
@@ -231,34 +227,6 @@
 
             <!-- 步驟 3 -->
             <div class="form-step-content" id="formStep3" style="display: none;">
-              <div class="form-group full-width">
-                <label class="form-label">事證照片／相關檔案附件上傳（選填）</label>
-                <div class="file-dropzone" id="mailboxFileDropzone">
-                  <div class="dropzone-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                  </div>
-                  <p style="font-weight: 600; font-size: 1rem; color: var(--gov-navy); margin-bottom: 0.3rem;">
-                    點擊選取檔案 或 將照片拖曳至此處
-                  </p>
-                  <p style="font-size: 0.85rem; color: var(--text-muted);">
-                    支援 JPG, PNG, PDF 格式，單一檔案上限 10MB
-                  </p>
-                  <input type="file" id="mailboxFileInput" multiple accept="image/*,.pdf" style="display: none;">
-                </div>
-                <div class="file-list-preview" id="fileListPreview"></div>
-              </div>
-
-              <div class="form-actions">
-                <button type="button" class="btn btn-secondary form-prev-step-btn">上一步</button>
-                <button type="button" class="btn btn-primary form-next-step-btn">
-                  下一步：填寫聯絡人身分驗證
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- 步驟 4 -->
-            <div class="form-step-content" id="formStep4" style="display: none;">
               <div class="form-grid">
                 <div class="form-group">
                   <label class="form-label" for="citizenName">陳情人姓名 <span class="required-star">*</span></label>
@@ -268,20 +236,13 @@
                 <div class="form-group">
                   <label class="form-label" for="citizenPhone">行動電話號碼 <span class="required-star">*</span></label>
                   <input type="tel" class="form-control" id="citizenPhone" placeholder="例如：0912345678" maxlength="10" required>
+                  <span class="form-hint">僅供市府承辦人員必要時聯繫勘驗使用。</span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group full-width">
                   <label class="form-label" for="citizenEmail">電子郵件信箱 <span class="required-star">*</span></label>
                   <input type="email" class="form-control" id="citizenEmail" placeholder="例如：citizen@example.com" required>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label" for="verificationCode">簡訊驗證碼 <span class="required-star">*</span></label>
-                  <div class="captcha-row">
-                    <input type="text" class="form-control" id="verificationCode" placeholder="請輸入 4 碼驗證碼" maxlength="4" required>
-                    <button type="button" class="send-code-btn" id="sendVerificationCodeBtn">發送驗證碼</button>
-                  </div>
-                  <span class="form-hint" style="color: var(--gov-blue);">提示：點擊發送將自動接收測試驗證碼（預設 8866）</span>
+                  <span class="form-hint">必填：將用來寄送案件確認信、案號查詢連結與市長正式回覆通知，並做為查詢驗證依據。</span>
                 </div>
 
                 <div class="form-group full-width">
@@ -307,19 +268,14 @@
               市民案件歷程即時追蹤系統
             </h3>
             <p style="color: var(--text-muted); font-size: 0.92rem;">
-              輸入案件編號（例如：MD-20261020-0042）或手機號碼查詢處理情形。
+              請輸入案件編號與當初填寫表單時使用的電子郵件信箱，雙重驗證後即可查詢辦理進度與市長回覆內容。
             </p>
           </div>
 
           <div class="inquiry-search-bar">
-            <input type="text" class="form-control" id="inquiryCaseInput" placeholder="請輸入案件編號（例如：MD-20261020-0042）...">
+            <input type="text" class="form-control" id="inquiryCaseInput" placeholder="請輸入案件編號（例如：MD-20261114-1234）" aria-label="輸入案件編號">
+            <input type="email" class="form-control" id="inquiryEmailInput" placeholder="請輸入通報時填寫的電子郵件信箱" aria-label="輸入電子郵件信箱">
             <button class="btn btn-primary" id="inquirySearchBtn">查詢進度</button>
-          </div>
-
-          <div class="sample-case-chips">
-            <span>快速試查：</span>
-            <button class="sample-chip" data-case="MD-20261020-0042">MD-20261020-0042 (已結案修復)</button>
-            <button class="sample-chip" data-case="MD-20261023-0188">MD-20261023-0188 (現地會勘中)</button>
           </div>
 
           <div id="caseQueryResult"></div>
