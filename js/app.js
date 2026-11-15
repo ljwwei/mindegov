@@ -3,15 +3,51 @@
  * 智慧民德．幸福永續
  */
 
+const MINDE_DEFAULT_API_BASE = 'https://mindegov-mailbox.gamerwillywilly.workers.dev';
+
+function getMindeApiBase() {
+  const raw = (typeof window !== 'undefined' && window.MINDE_MAILBOX_API) || MINDE_DEFAULT_API_BASE;
+  return String(raw || '').replace(/\/+$/, '');
+}
+
+window.getMindeApiBase = getMindeApiBase;
+
 document.addEventListener('DOMContentLoaded', () => {
   initLiveClock();
   initLiveWeather();
+  initVisitCounter();
   initAccessibility();
   initHeader();
   initHeroSlider();
   initQuickSearchModal();
   initBackToTop();
 });
+
+/* ========================================================
+   網站累積瀏覽總人次 (Cloudflare Worker + D1 即時累計)
+   ======================================================== */
+async function initVisitCounter() {
+  const visitEl = document.getElementById('siteVisitCount');
+  if (!visitEl) return;
+
+  visitEl.textContent = '0';
+  const apiBase = getMindeApiBase();
+  if (!apiBase) return;
+
+  try {
+    const res = await fetch(`${apiBase}/api/stats/visits`, {
+      method: 'POST',
+      cache: 'no-store'
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data && data.ok && typeof data.visits === 'number') {
+      visitEl.textContent = Math.max(0, data.visits).toLocaleString('zh-TW');
+    }
+  } catch (err) {
+    console.warn('[瀏覽總人次] 累計失敗', err);
+  }
+}
 
 /* ========================================================
    0. 即時台灣時間 (Live Taiwan Clock, Asia/Taipei, 24H)
@@ -453,6 +489,15 @@ function initQuickSearchModal() {
     });
   }
 
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function performSearch(kw) {
     const annMatches = (window.MINDE_DATA?.announcements || []).filter(a =>
       a.title.toLowerCase().includes(kw) || a.summary.toLowerCase().includes(kw) || a.bureau.toLowerCase().includes(kw)
@@ -475,7 +520,7 @@ function initQuickSearchModal() {
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <p style="font-weight: 600;">抱歉，找不到與「${kw}」相符的市政資訊。</p>
+          <p style="font-weight: 600;">抱歉，找不到與「${escapeHtml(kw)}」相符的市政資訊。</p>
           <p style="font-size: 0.85rem; margin-top: 0.3rem;">請嘗試輸入其他關鍵字，或撥打 1999 市民當家熱線洽詢。</p>
         </div>
       `;
@@ -488,13 +533,13 @@ function initQuickSearchModal() {
       html += `<div style="font-weight: 700; color: var(--gov-blue); font-size: 0.9rem; padding: 0 0.5rem;">便民服務申辦 (${srvMatches.length})</div>`;
       srvMatches.forEach(s => {
         html += `
-          <div class="announcement-item" onclick="openServiceModal('${s.id}'); document.getElementById('globalSearchModal').classList.remove('active');">
+          <div class="announcement-item" onclick="openServiceModal('${escapeHtml(s.id)}'); document.getElementById('globalSearchModal').classList.remove('active');">
             <div class="announcement-main">
               <span class="category-badge primary">線上申辦</span>
               <span class="announcement-title">${highlightText(s.title, kw)}</span>
             </div>
             <div class="announcement-meta">
-              <span class="announcement-bureau">${s.bureau}</span>
+              <span class="announcement-bureau">${escapeHtml(s.bureau)}</span>
             </div>
           </div>
         `;
@@ -505,13 +550,13 @@ function initQuickSearchModal() {
       html += `<div style="font-weight: 700; color: var(--gov-navy); font-size: 0.9rem; padding: 0.5rem 0.5rem 0;">最新公告消息 (${annMatches.length})</div>`;
       annMatches.forEach(a => {
         html += `
-          <div class="announcement-item" onclick="openAnnouncementModal('${a.id}'); document.getElementById('globalSearchModal').classList.remove('active');">
+          <div class="announcement-item" onclick="openAnnouncementModal('${escapeHtml(a.id)}'); document.getElementById('globalSearchModal').classList.remove('active');">
             <div class="announcement-main">
-              <span class="category-badge ${a.badgeColor}">${a.categoryName}</span>
+              <span class="category-badge ${escapeHtml(a.badgeColor)}">${escapeHtml(a.categoryName)}</span>
               <span class="announcement-title">${highlightText(a.title, kw)}</span>
             </div>
             <div class="announcement-meta">
-              <span>${a.date}</span>
+              <span>${escapeHtml(a.date)}</span>
             </div>
           </div>
         `;
@@ -522,13 +567,13 @@ function initQuickSearchModal() {
       html += `<div style="font-weight: 700; color: var(--gov-emerald); font-size: 0.9rem; padding: 0.5rem 0.5rem 0;">市府局處組織 (${deptMatches.length})</div>`;
       deptMatches.forEach(d => {
         html += `
-          <div class="announcement-item" onclick="openDepartmentModal('${d.id}'); document.getElementById('globalSearchModal').classList.remove('active');">
+          <div class="announcement-item" onclick="openDepartmentModal('${escapeHtml(d.id)}'); document.getElementById('globalSearchModal').classList.remove('active');">
             <div class="announcement-main">
-              <span class="category-badge info">${d.name}</span>
+              <span class="category-badge info">${escapeHtml(d.name)}</span>
               <span class="announcement-title">${highlightText(d.intro.slice(0, 50) + '...', kw)}</span>
             </div>
             <div class="announcement-meta">
-              <span>${d.phone}</span>
+              <span>${escapeHtml(d.phone)}</span>
             </div>
           </div>
         `;
@@ -540,9 +585,11 @@ function initQuickSearchModal() {
   }
 
   function highlightText(text, term) {
-    if (!term) return text;
-    const regex = new RegExp(`(${term})`, 'gi');
-    return text.replace(regex, '<mark style="background: #fef08a; padding: 0 2px; border-radius: 2px;">$1</mark>');
+    const safe = escapeHtml(text);
+    if (!term) return safe;
+    const escapedTerm = escapeHtml(term).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escapedTerm})`, 'gi');
+    return safe.replace(regex, '<mark style="background: #fef08a; padding: 0 2px; border-radius: 2px;">$1</mark>');
   }
 }
 

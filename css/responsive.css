@@ -46,37 +46,16 @@ main section[id] {
   }
 
   .hero-content {
-    padding: 5rem 0 7rem;
+    padding: 5rem 0 5.5rem;
   }
 
-  /* 輪播控制鍵上移，避開懸浮的數據看板 */
   .slider-controls {
-    bottom: 5.25rem;
+    bottom: 2rem;
     right: max(2rem, calc((100vw - 1280px) / 2 + 2rem));
   }
 
-  /* 市政績效數據看板：懸浮卡片壓在英雄區底部 */
-  .civic-stats-bar {
-    background: transparent;
-    border-bottom: none;
-    box-shadow: none;
-    padding: 0;
-    margin-top: -3rem;
-    position: relative;
-    z-index: 5;
-  }
-
-  .civic-stats-bar .stats-grid {
-    background: var(--gov-navy);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-xl);
-    padding: 1.25rem 0.75rem;
-    gap: 0;
-  }
-
   .services-section {
-    padding-top: 6rem;
+    padding-top: 5rem;
   }
 }
 

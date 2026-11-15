@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>市政公告與活動管理後台｜民德市政府</title>
+  <script>
+    if (!location.pathname.endsWith('/') && !location.pathname.endsWith('.html')) {
+      location.replace(location.pathname + '/' + location.search + location.hash);
+    }
+  </script>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    body {
+      background: #f1f5f9;
+      min-height: 100vh;
+    }
+
+    .admin-topbar {
+      background: linear-gradient(135deg, #071e3d 0%, #0f3361 100%);
+      color: #ffffff;
+      border-bottom: 3px solid var(--gov-cyan, #0ea5e9);
+      padding: 1rem 0;
+    }
+
+    .admin-topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .admin-brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 10px;
+      padding: 4px;
+    }
+
+    .admin-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: #7dd3fc;
+      font-weight: 700;
+    }
+
+    .admin-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .admin-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-login-shell {
+      min-height: calc(100vh - 100px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .admin-login-card {
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 2.25rem;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    .admin-login-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.7rem;
+      border-radius: 9999px;
+      margin-bottom: 0.85rem;
+    }
+
+    .admin-shell {
+      padding: 2rem 0 4rem;
+    }
+
+    .admin-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .admin-kpi-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.15rem 1.25rem;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.45rem;
+    }
+
+    .admin-kpi-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .admin-kpi-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #0f3361;
+      line-height: 1.2;
+    }
+
+    .admin-kpi-sub {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+
+    .admin-panel {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .admin-tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-tab-btn {
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.96rem;
+      color: #64748b;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+    }
+
+    .admin-tab-btn.active {
+      color: #0f3361;
+      border-bottom-color: #1a56db;
+    }
+
+    .admin-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .admin-filters {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .admin-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .admin-item-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+      background: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .admin-item-card.is-hidden-draft {
+      background: #f8fafc;
+      border-style: dashed;
+      opacity: 0.88;
+    }
+
+    .admin-item-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    }
+
+    .admin-item-main {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .admin-item-badges {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.45rem;
+    }
+
+    .status-chip {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.18rem 0.55rem;
+      border-radius: 9999px;
+    }
+
+    .status-chip.published {
+      background: #dcfce7;
+      color: #047857;
+    }
+
+    .status-chip.draft {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .status-chip.pinned {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .admin-item-title {
+      font-size: 1.04rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.3rem;
+      line-height: 1.45;
+    }
+
+    .admin-item-meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.83rem;
+      color: #64748b;
+    }
+
+    .admin-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-xs {
+      padding: 0.36rem 0.7rem;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      font-weight: 600;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #1e293b;
+      cursor: pointer;
+    }
+
+    .btn-xs:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-xs.primary {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+
+    .btn-xs.danger {
+      background: #fef2f2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
+    .event-admin-row {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .event-admin-thumb {
+      width: 112px;
+      height: 76px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+
+    .attachment-editor-row {
+      display: grid;
+      grid-template-columns: 1.2fr 0.7fr 1.4fr auto;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .image-preset-bar {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      margin-top: 0.45rem;
+    }
+
+    .error-banner {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 0.75rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 680px) {
+      .attachment-editor-row {
+        grid-template-columns: 1fr;
+      }
+      .event-admin-row {
+        flex-direction: column;
+      }
+      .event-admin-thumb {
+        width: 100%;
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="admin-topbar">
+    <div class="container admin-topbar-inner">
+      <div class="admin-brand">
+        <img src="../assets/images/logo-icon.png" alt="民德市政府市徽">
+        <div>
+          <div class="admin-eyebrow">MINDE CITY GOVERNMENT ADMIN</div>
+          <h1 class="admin-title">民德市政府｜市政公告與活動管理後台</h1>
+        </div>
+      </div>
+      <div class="admin-topbar-actions">
+        <a href="../" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.86rem;">
+          檢視官網首頁
+        </a>
+        <button type="button" id="adminLogoutBtn" class="btn btn-outline-white" style="display: none; padding: 0.45rem 0.9rem; font-size: 0.86rem;">
+          登出後台
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 未登入驗證門檻 -->
+  <section id="adminLoginSection" class="admin-login-shell">
+    <div class="admin-login-card">
+      <span class="admin-login-badge">非公開專屬管理入口</span>
+      <h2 style="font-size: 1.45rem; font-weight: 800; color: #0f3361; margin-bottom: 0.45rem;">請驗證管理員身分</h2>
+      <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1.35rem;">
+        請輸入設定於 Cloudflare Worker 的管理員密碼（<code>ADMIN_PASSWORD</code>），通過驗證後即可即時管理官網公告、重大活動與瀏覽統計數據。
+      </p>
+      <div id="loginErrorBanner" class="error-banner" style="display: none;"></div>
+      <form id="adminLoginForm">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="adminPasswordInput">管理員密碼</label>
+          <input type="password" class="form-control" id="adminPasswordInput" placeholder="請輸入管理員密碼" autocomplete="current-password" required>
+        </div>
+        <button type="submit" id="adminLoginSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 0.78rem;">
+          驗證並進入管理系統
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 已登入管理主畫面 -->
+  <main id="adminDashboardSection" class="admin-shell" style="display: none;">
+    <div class="container">
+      <!-- 統計總覽卡片 -->
+      <div class="admin-kpi-grid">
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-label">官網累積瀏覽總人次（真實 D1 累計）</div>
+          <div class="admin-kpi-value" id="kpiTotalVisits">0</div>
+          <div class="admin-kpi-sub">
+            <span>人（隨首頁瀏覽即時累加）</span>
+            <button type="button" id="resetVisitsBtn" class="btn-xs danger">歸零</button>
+          </div>
+        </div>
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-label">市政公告數量</div>
+          <div class="admin-kpi-value" id="kpiAnnouncementsCount">0 / 0</div>
+          <div class="admin-kpi-sub"><span>已發布 / 全部公告</span></div>
+        </div>
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-label">公告累計總點閱次數</div>
+          <div class="admin-kpi-value" id="kpiTotalAnnClicks">0</div>
+          <div class="admin-kpi-sub"><span>所有公告真實點擊加總</span></div>
+        </div>
+        <div class="admin-kpi-card">
+          <div class="admin-kpi-label">市府重大活動數量</div>
+          <div class="admin-kpi-value" id="kpiEventsCount">0 / 0</div>
+          <div class="admin-kpi-sub"><span>已發布 / 全部活動</span></div>
+        </div>
+      </div>
+
+      <div class="admin-panel">
+        <div class="admin-tabs" role="tablist">
+          <button type="button" class="admin-tab-btn active" data-admin-tab="announcements">最新市政公告管理</button>
+          <button type="button" class="admin-tab-btn" data-admin-tab="events">市府重大活動專區管理</button>
+        </div>
+
+        <!-- 頁籤 1：最新市政公告管理 -->
+        <div id="tabPaneAnnouncements">
+          <div class="admin-toolbar">
+            <div class="admin-filters">
+              <select id="adminAnnCategoryFilter" class="form-control" style="max-width: 170px;">
+                <option value="all">全部分類</option>
+                <option value="news">市政焦點</option>
+                <option value="urgent">重要警戒</option>
+                <option value="events">活動訊息</option>
+                <option value="tenders">招標採購</option>
+                <option value="recruit">徵才資訊</option>
+              </select>
+              <input type="text" id="adminAnnSearchInput" class="form-control" style="max-width: 280px;" placeholder="搜尋標題或發布單位...">
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" id="refreshOverviewBtn" class="btn btn-secondary">重新整理數據</button>
+              <button type="button" id="newAnnouncementBtn" class="btn btn-primary">＋ 新增市政公告</button>
+            </div>
+          </div>
+
+          <div id="adminAnnouncementsList" class="admin-list"></div>
+        </div>
+
+        <!-- 頁籤 2：市府重大活動管理 -->
+        <div id="tabPaneEvents" style="display: none;">
+          <div class="admin-toolbar">
+            <div style="font-size: 0.92rem; color: #475569; font-weight: 600;">
+              控制官網「市府重大活動專區」展示卡片、報名狀態與活動亮點
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" id="refreshEventsBtn" class="btn btn-secondary">重新整理數據</button>
+              <button type="button" id="newEventBtn" class="btn btn-primary">＋ 新增重大活動</button>
+            </div>
+          </div>
+
+          <div id="adminEventsList" class="admin-list"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 公告新增／編輯 Modal -->
+  <div class="modal-backdrop" id="announcementEditorModal" role="dialog" aria-modal="true" aria-labelledby="annEditorTitle">
+    <div class="modal-dialog" style="max-width: 760px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="annEditorTitle">新增市政公告</h3>
+        <button type="button" class="modal-close-btn" aria-label="關閉">✕</button>
+      </div>
+      <form id="announcementEditorForm" style="display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden;">
+        <div class="modal-body" style="flex: 1; overflow-y: auto;">
+          <input type="hidden" id="annEditId">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="annCategoryInput">公告分類 <span class="required-star">*</span></label>
+              <select id="annCategoryInput" class="form-control" required>
+                <option value="news">市政焦點</option>
+                <option value="urgent">重要警戒</option>
+                <option value="events">活動訊息</option>
+                <option value="tenders">招標採購</option>
+                <option value="recruit">徵才資訊</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="annDateInput">發布日期 <span class="required-star">*</span></label>
+              <input type="date" id="annDateInput" class="form-control" required>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="annTitleInput">公告標題 <span class="required-star">*</span></label>
+              <input type="text" id="annTitleInput" class="form-control" maxlength="200" placeholder="請輸入公告完整標題" required>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="annBureauInput">發布單位／局處 <span class="required-star">*</span></label>
+              <input type="text" id="annBureauInput" class="form-control" maxlength="100" placeholder="例如：工務局水利處、民政局 / 資訊處" required>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="annSummaryInput">公告摘要 <span class="required-star">*</span></label>
+              <textarea id="annSummaryInput" class="form-control" rows="2" maxlength="500" placeholder="請輸入簡短摘要（用於關鍵字搜尋與詳情頂端摘要區）" required></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="annContentInput">公告詳細內文 <span class="required-star">*</span></label>
+              <textarea id="annContentInput" class="form-control" rows="7" placeholder="請輸入公告全文（一般文字會自動依空行分段，亦支援 &lt;p&gt;、&lt;h3&gt;、&lt;ul&gt; 等基本排版標籤）" required></textarea>
+            </div>
+            <div class="form-group full-width">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                <label class="form-label" style="margin-bottom: 0;">相關附件／外部連結（選填）</label>
+                <button type="button" id="addAttachmentRowBtn" class="btn-xs primary">＋ 新增一列附件</button>
+              </div>
+              <div id="attachmentsEditorContainer"></div>
+            </div>
+            <div class="form-group full-width" style="display: flex; gap: 1.5rem; flex-wrap: wrap; padding-top: 0.5rem;">
+              <label class="checkbox-label">
+                <input type="checkbox" id="annPinnedCheck">
+                <span>設為置頂重要公告</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="annPublishedCheck" checked>
+                <span>立即公開發布於官網</span>
+              </label>
+              <label class="checkbox-label" id="annResetClicksWrap" style="display: none;">
+                <input type="checkbox" id="annResetClicksCheck">
+                <span>儲存時將此公告點擊次數歸零（目前 <strong id="annCurrentClicksText">0</strong> 次）</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">取消</button>
+          <button type="submit" id="saveAnnouncementBtn" class="btn btn-primary">儲存公告資料</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 重大活動新增／編輯 Modal -->
+  <div class="modal-backdrop" id="eventEditorModal" role="dialog" aria-modal="true" aria-labelledby="evtEditorTitle">
+    <div class="modal-dialog" style="max-width: 760px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="evtEditorTitle">新增市府重大活動</h3>
+        <button type="button" class="modal-close-btn" aria-label="關閉">✕</button>
+      </div>
+      <form id="eventEditorForm" style="display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden;">
+        <div class="modal-body" style="flex: 1; overflow-y: auto;">
+          <input type="hidden" id="evtEditId">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label" for="evtTitleInput">活動標題 <span class="required-star">*</span></label>
+              <input type="text" id="evtTitleInput" class="form-control" maxlength="200" placeholder="例如：2026 民德水岸光影藝術季" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="evtCategoryInput">活動類別 <span class="required-star">*</span></label>
+              <input type="text" id="evtCategoryInput" class="form-control" maxlength="60" placeholder="例如：文化藝術、科技經貿、健康體育" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="evtStatusInput">活動狀態 <span class="required-star">*</span></label>
+              <select id="evtStatusInput" class="form-control" required>
+                <option value="ongoing">進行中</option>
+                <option value="registration">報名中</option>
+                <option value="upcoming">即將額滿</option>
+                <option value="ended">已結束</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="evtDateRangeInput">活動期間／時間 <span class="required-star">*</span></label>
+              <input type="text" id="evtDateRangeInput" class="form-control" maxlength="100" placeholder="例如：2026/11/20 ~ 2026/12/20" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="evtSortOrderInput">顯示排序（數字越小越靠前）</label>
+              <input type="number" id="evtSortOrderInput" class="form-control" value="10">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="evtLocationInput">活動地點 <span class="required-star">*</span></label>
+              <input type="text" id="evtLocationInput" class="form-control" maxlength="200" placeholder="例如：市政大樓市民廣場" required>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="evtParticipantsInput">參與人數／名額標示</label>
+              <input type="text" id="evtParticipantsInput" class="form-control" maxlength="100" placeholder="例如：歡迎市民自由參加、限量 500 席">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="evtImageInput">代表圖片路徑或網址</label>
+              <input type="text" id="evtImageInput" class="form-control" value="assets/images/minde_city_hall.jpg" placeholder="assets/images/... 或 https://...">
+              <div class="image-preset-bar">
+                <button type="button" class="btn-xs" data-img-preset="assets/images/waterfront_festival.jpg">套用：水岸光影圖</button>
+                <button type="button" class="btn-xs" data-img-preset="assets/images/smart_city_expo.jpg">套用：智慧論壇圖</button>
+                <button type="button" class="btn-xs" data-img-preset="assets/images/minde_city_hall.jpg">套用：市政大樓圖</button>
+              </div>
+              <img id="evtImagePreview" src="../assets/images/minde_city_hall.jpg" alt="圖片預覽" style="margin-top: 0.65rem; width: 220px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="evtDescInput">活動詳細介紹 <span class="required-star">*</span></label>
+              <textarea id="evtDescInput" class="form-control" rows="4" maxlength="3000" required></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" for="evtHighlightsInput">活動焦點亮點（每一行代表一項亮點，選填）</label>
+              <textarea id="evtHighlightsInput" class="form-control" rows="4" placeholder="例如：&#10;水幕無人機燈光秀&#10;百攤文創市集"></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label class="checkbox-label">
+                <input type="checkbox" id="evtPublishedCheck" checked>
+                <span>立即公開發布於官網重大活動專區</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">取消</button>
+          <button type="submit" id="saveEventBtn" class="btn btn-primary">儲存活動資料</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

@@ -1,13 +1,59 @@
 /**
  * 民德市政府官網 - 最新公告與便民服務互動模組 (Announcements & Services Module)
  * 智慧民德．幸福永續
+ *
+ * 串接 Cloudflare Worker + D1 同步最新公告、市府活動及真實公告點擊累計次數；
+ * 若無法連線後端，則平滑降級顯示本地靜態備援資料。
  */
+
+const ANNOUNCEMENTS_FALLBACK_API = 'https://mindegov-mailbox.gamerwillywilly.workers.dev';
+
+function getAnnouncementsApiBase() {
+  if (typeof window !== 'undefined') {
+    if (typeof window.getMindeApiBase === 'function') return window.getMindeApiBase();
+    if (window.MINDE_MAILBOX_API) return String(window.MINDE_MAILBOX_API).replace(/\/+$/, '');
+  }
+  return ANNOUNCEMENTS_FALLBACK_API;
+}
+
+function escapeAnnHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function sanitizeSafeUrl(raw) {
+  const s = String(raw || '').trim();
+  if (/^https?:\/\//i.test(s)) return s;
+  if (/^assets\/images\/[a-zA-Z0-9_.-]+$/.test(s)) return s;
+  return '';
+}
+
+function renderSafeAnnouncementBody(raw) {
+  const text = String(raw || '').trim();
+  if (!text) return '';
+  if (!/<[a-zA-Z][\s\S]*>/.test(text)) {
+    return text
+      .split(/\r?\n\r?\n+/)
+      .map(p => `<p>${escapeAnnHtml(p.trim()).replace(/\r?\n/g, '<br>')}</p>`)
+      .join('\n');
+  }
+  return text
+    .replace(/<(script|style|iframe|object|embed|svg|form|input|meta|link)\b[\s\S]*?>[\s\S]*?<\/\1>/gi, '')
+    .replace(/<(script|style|iframe|object|embed|svg|form|input|meta|link)\b[^>]*\/?>/gi, '')
+    .replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+    .replace(/(href|src)\s*=\s*(?:"\s*(?:javascript|data):[^"]*"|'\s*(?:javascript|data):[^']*')/gi, '$1="#"');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   initAnnouncements();
   initQuickServices();
   initCityEvents();
   initModalListeners();
+  syncPublicAnnouncementsAndEvents();
 });
 
 /* ========================================================
@@ -15,10 +61,53 @@ document.addEventListener('DOMContentLoaded', () => {
    ======================================================== */
 let currentCategory = 'all';
 let currentSearchKeyword = '';
+let activeModalAnnouncementId = '';
+let remoteAnnouncementsLoaded = false;
+let remoteEventsLoaded = false;
+
+async function syncPublicAnnouncementsAndEvents() {
+  const apiBase = getAnnouncementsApiBase();
+  if (!apiBase || !window.MINDE_DATA) return;
+
+  const [annRes, evtRes] = await Promise.allSettled([
+    fetch(`${apiBase}/api/announcements`, { cache: 'no-store' }),
+    fetch(`${apiBase}/api/events`, { cache: 'no-store' })
+  ]);
+
+  if (annRes.status === 'fulfilled' && annRes.value.ok) {
+    try {
+      const data = await annRes.value.json();
+      if (data?.ok && Array.isArray(data.announcements)) {
+        window.MINDE_DATA.announcements = data.announcements.map(item => ({
+          ...item,
+          views: Number(item.clicks ?? item.views ?? 0)
+        }));
+      }
+    } catch {
+      // ignore parse error, keep fallback data
+    }
+  }
+  remoteAnnouncementsLoaded = true;
+  renderAnnouncementsList();
+
+  if (evtRes.status === 'fulfilled' && evtRes.value.ok) {
+    try {
+      const data = await evtRes.value.json();
+      if (data?.ok && Array.isArray(data.events)) {
+        window.MINDE_DATA.cityEvents = data.events;
+      }
+    } catch {
+      // ignore parse error, keep fallback data
+    }
+  }
+  remoteEventsLoaded = true;
+  renderCityEventsGrid();
+}
 
 function initAnnouncements() {
   const tabs = document.querySelectorAll('.announcement-tab');
   const searchInput = document.getElementById('announcementSearchInput');
+  const viewAllBtn = document.getElementById('viewAllAnnouncementsBtn');
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -36,7 +125,30 @@ function initAnnouncements() {
     });
   }
 
-  renderAnnouncementsList();
+  if (viewAllBtn) {
+    viewAllBtn.addEventListener('click', () => {
+      currentCategory = 'all';
+      currentSearchKeyword = '';
+      if (searchInput) searchInput.value = '';
+      tabs.forEach(t => {
+        t.classList.toggle('active', t.getAttribute('data-category') === 'all');
+      });
+      renderAnnouncementsList();
+      const count = (window.MINDE_DATA?.announcements || []).length;
+      if (typeof window.showToast === 'function') {
+        window.showToast(`已為您呈現全體 ${count} 筆市政公告`, 'info');
+      }
+    });
+  }
+
+  const listContainer = document.getElementById('announcementsListContainer');
+  if (listContainer && !remoteAnnouncementsLoaded) {
+    listContainer.innerHTML = `
+      <div style="padding: 2.25rem; text-align: center; color: var(--text-muted); background: var(--bg-surface-raised); border-radius: var(--radius-sm);">
+        正在載入最新市政公告...
+      </div>
+    `;
+  }
 }
 
 function renderAnnouncementsList() {
@@ -47,14 +159,14 @@ function renderAnnouncementsList() {
 
   const filtered = data.filter(item => {
     const matchesCat = currentCategory === 'all' || item.category === currentCategory;
-    const matchesKw = !currentSearchKeyword || 
-      item.title.toLowerCase().includes(currentSearchKeyword) ||
-      item.bureau.toLowerCase().includes(currentSearchKeyword) ||
-      item.summary.toLowerCase().includes(currentSearchKeyword);
+    const matchesKw = !currentSearchKeyword ||
+      String(item.title || '').toLowerCase().includes(currentSearchKeyword) ||
+      String(item.bureau || '').toLowerCase().includes(currentSearchKeyword) ||
+      String(item.summary || '').toLowerCase().includes(currentSearchKeyword);
     return matchesCat && matchesKw;
   });
 
-  // 置頂公告排序最前
+  // 置頂公告排序最前，其次依發布日期新至舊
   filtered.sort((a, b) => {
     if (a.isPinned && !b.isPinned) return -1;
     if (!a.isPinned && b.isPinned) return 1;
@@ -73,6 +185,8 @@ function renderAnnouncementsList() {
 
   let html = '';
   filtered.forEach(item => {
+    const safeId = escapeAnnHtml(item.id);
+    const clickCount = Number(item.clicks ?? item.views ?? 0);
     const pinnedHtml = item.isPinned ? `
       <span class="pinned-icon" title="重要置頂公告">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -83,23 +197,23 @@ function renderAnnouncementsList() {
     ` : '';
 
     html += `
-      <div class="announcement-item ${item.isPinned ? 'is-pinned' : ''}" onclick="openAnnouncementModal('${item.id}')" role="button" tabindex="0">
+      <div class="announcement-item ${item.isPinned ? 'is-pinned' : ''}" onclick="openAnnouncementModal('${safeId}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAnnouncementModal('${safeId}');}" role="button" tabindex="0">
         <div class="announcement-main">
-          <span class="category-badge ${item.badgeColor}">${item.categoryName}</span>
+          <span class="category-badge ${escapeAnnHtml(item.badgeColor)}">${escapeAnnHtml(item.categoryName)}</span>
           <span class="announcement-title">
             ${pinnedHtml}
-            ${item.title}
+            ${escapeAnnHtml(item.title)}
           </span>
         </div>
         <div class="announcement-meta">
-          <span class="announcement-bureau">${item.bureau}</span>
-          <span class="announcement-date">${item.date}</span>
-          <span class="announcement-views">
+          <span class="announcement-bureau">${escapeAnnHtml(item.bureau)}</span>
+          <span class="announcement-date">${escapeAnnHtml(item.date)}</span>
+          <span class="announcement-views" data-ann-views="${safeId}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
-            ${item.views.toLocaleString()}
+            ${clickCount.toLocaleString('zh-TW')}
           </span>
         </div>
       </div>
@@ -109,7 +223,7 @@ function renderAnnouncementsList() {
   listContainer.innerHTML = html;
 }
 
-// 開啟公告詳情對話框
+// 開啟公告詳情對話框並累計真實點擊次數
 function openAnnouncementModal(id) {
   const item = (window.MINDE_DATA?.announcements || []).find(a => a.id === id);
   if (!item) return;
@@ -122,28 +236,40 @@ function openAnnouncementModal(id) {
 
   if (!modal) return;
 
+  activeModalAnnouncementId = id;
+  const optimisticClicks = Number(item.clicks ?? item.views ?? 0) + 1;
+  item.views = optimisticClicks;
+  item.clicks = optimisticClicks;
+
   titleEl.textContent = item.title;
   metaEl.innerHTML = `
-    <span class="category-badge ${item.badgeColor}">${item.categoryName}</span>
-    <span>發布單位：<strong>${item.bureau}</strong></span>
-    <span>發布日期：${item.date}</span>
-    <span>點閱人次：${item.views + 1} 次</span>
+    <span class="category-badge ${escapeAnnHtml(item.badgeColor)}">${escapeAnnHtml(item.categoryName)}</span>
+    <span>發布單位：<strong>${escapeAnnHtml(item.bureau)}</strong></span>
+    <span>發布日期：${escapeAnnHtml(item.date)}</span>
+    <span id="modalNoticeClicks">點閱人次：${optimisticClicks.toLocaleString('zh-TW')} 次</span>
   `;
 
   contentEl.innerHTML = `
     <div style="background: var(--bg-surface-raised); padding: 1rem 1.25rem; border-left: 4px solid var(--gov-blue); border-radius: var(--radius-sm); margin-bottom: 1.5rem; font-size: 0.95rem; color: var(--text-sub);">
-      <strong>【公告摘要】</strong>${item.summary}
+      <strong>【公告摘要】</strong>${escapeAnnHtml(item.summary)}
     </div>
-    ${item.content}
+    ${renderSafeAnnouncementBody(item.content)}
   `;
 
   if (item.attachments && item.attachments.length > 0) {
     let attHtml = `
       <div style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light);">
-        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--gov-navy);">相關附件下載 (ODF/PDF 政府標準開放格式)：</h4>
+        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--gov-navy);">相關附件與參考資料：</h4>
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
     `;
     item.attachments.forEach(att => {
+      const safeName = escapeAnnHtml(att.name);
+      const safeSize = escapeAnnHtml(att.size || '');
+      const safeUrl = sanitizeSafeUrl(att.url);
+      const actionControl = safeUrl
+        ? `<a href="${escapeAnnHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="padding: 0.3rem 0.75rem; font-size: 0.78rem; text-decoration: none;">開啟連結</a>`
+        : `<button type="button" class="btn btn-secondary" style="padding: 0.3rem 0.75rem; font-size: 0.78rem;" onclick="showToast('已開始下載附件：${safeName}', 'success')">下載檔案</button>`;
+
       attHtml += `
         <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0.9rem; background: var(--bg-surface-raised); border: 1px solid var(--border-light); border-radius: var(--radius-sm); font-size: 0.88rem;">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -151,9 +277,9 @@ function openAnnouncementModal(id) {
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
               <polyline points="14 2 14 8 20 8"></polyline>
             </svg>
-            <span>${att.name} (${att.size})</span>
+            <span>${safeName}${safeSize ? ` (${safeSize})` : ''}</span>
           </div>
-          <button class="btn btn-secondary" style="padding: 0.3rem 0.75rem; font-size: 0.78rem;" onclick="showToast('已開始下載附件：${att.name}', 'success')">下載檔案</button>
+          ${actionControl}
         </div>
       `;
     });
@@ -163,7 +289,42 @@ function openAnnouncementModal(id) {
     attachmentsEl.innerHTML = '';
   }
 
+  renderAnnouncementsList();
   modal.classList.add('active');
+  recordAnnouncementClick(id);
+}
+
+async function recordAnnouncementClick(id) {
+  const apiBase = getAnnouncementsApiBase();
+  if (!apiBase) return;
+
+  try {
+    const res = await fetch(`${apiBase}/api/announcements/${encodeURIComponent(id)}/click`, {
+      method: 'POST',
+      keepalive: true,
+      cache: 'no-store'
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data?.ok || typeof data.clicks !== 'number') return;
+
+    const item = (window.MINDE_DATA?.announcements || []).find(a => a.id === id);
+    if (item) {
+      item.clicks = data.clicks;
+      item.views = data.clicks;
+    }
+
+    if (activeModalAnnouncementId === id) {
+      const clickEl = document.getElementById('modalNoticeClicks');
+      if (clickEl) {
+        clickEl.textContent = `點閱人次：${data.clicks.toLocaleString('zh-TW')} 次`;
+      }
+    }
+
+    renderAnnouncementsList();
+  } catch (err) {
+    console.warn('[公告點擊] 累計失敗', err);
+  }
 }
 
 /* ========================================================
@@ -283,17 +444,38 @@ function openServiceModal(id) {
    ======================================================== */
 function initCityEvents() {
   const container = document.getElementById('cityEventsGridContainer');
+  if (container && !remoteEventsLoaded) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 2.25rem; text-align: center; color: var(--text-muted); background: var(--bg-surface-raised); border-radius: var(--radius-sm);">
+        正在載入市府重大活動資訊...
+      </div>
+    `;
+  }
+}
+
+function renderCityEventsGrid() {
+  const container = document.getElementById('cityEventsGridContainer');
   if (!container || !window.MINDE_DATA) return;
 
   const events = window.MINDE_DATA.cityEvents || [];
-  let html = '';
+  if (events.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 3rem; text-align: center; color: var(--text-muted); background: var(--bg-surface-raised); border-radius: var(--radius-sm);">
+        目前暫無已發布之市府重大活動。
+      </div>
+    `;
+    return;
+  }
 
+  let html = '';
   events.forEach(item => {
+    const safeId = escapeAnnHtml(item.id);
+    const safeImg = escapeAnnHtml(sanitizeSafeUrl(item.image) || 'assets/images/minde_city_hall.jpg');
     html += `
       <div class="event-card">
         <div class="event-media">
-          <img src="${item.image}" alt="${item.title}" class="event-img" loading="lazy">
-          <span class="event-status-pill ${item.status}">${item.statusLabel}</span>
+          <img src="${safeImg}" alt="${escapeAnnHtml(item.title)}" class="event-img" loading="lazy">
+          <span class="event-status-pill ${escapeAnnHtml(item.status)}">${escapeAnnHtml(item.statusLabel)}</span>
         </div>
         <div class="event-body">
           <div class="event-date-row">
@@ -303,20 +485,20 @@ function initCityEvents() {
               <line x1="8" y1="2" x2="8" y2="6"></line>
               <line x1="3" y1="10" x2="21" y2="10"></line>
             </svg>
-            <span>${item.dateRange}</span>
+            <span>${escapeAnnHtml(item.dateRange)}</span>
           </div>
-          <h3 class="event-title">${item.title}</h3>
+          <h3 class="event-title">${escapeAnnHtml(item.title)}</h3>
           <div class="event-location">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
-            <span>${item.location}</span>
+            <span>${escapeAnnHtml(item.location)}</span>
           </div>
-          <p class="event-desc">${item.description}</p>
+          <p class="event-desc">${escapeAnnHtml(item.description)}</p>
           <div class="event-footer">
-            <span class="event-participants">${item.participants}</span>
-            <button class="btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;" onclick="openEventRegisterModal('${item.id}')">
+            <span class="event-participants">${escapeAnnHtml(item.participants)}</span>
+            <button class="btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;" onclick="openEventRegisterModal('${safeId}')">
               我要報名 / 詳情
             </button>
           </div>
@@ -338,22 +520,26 @@ function openEventRegisterModal(id) {
 
   if (!modal) return;
 
-  titleEl.textContent = event.title;
-  bodyEl.innerHTML = `
-    <div style="margin-bottom: 1.5rem;">
-      <img src="${event.image}" style="width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
-      <p style="color: var(--text-sub); line-height: 1.7; margin-bottom: 1.25rem;">${event.description}</p>
-      
+  const safeImg = escapeAnnHtml(sanitizeSafeUrl(event.image) || 'assets/images/minde_city_hall.jpg');
+  const highlights = Array.isArray(event.highlights) ? event.highlights : [];
+  const highlightsBlock = highlights.length > 0 ? `
       <h4 style="font-weight: 700; color: var(--gov-navy); margin-bottom: 0.6rem;">活動焦點亮點：</h4>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.5rem;">
-        ${event.highlights.map(h => `
+        ${highlights.map(h => `
           <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; background: var(--bg-surface-raised); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm);">
             <svg style="width: 16px; height: 16px; stroke: var(--gov-emerald);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>${h}</span>
+            <span>${escapeAnnHtml(h)}</span>
           </div>
         `).join('')}
       </div>
+  ` : '';
 
+  titleEl.textContent = event.title;
+  bodyEl.innerHTML = `
+    <div style="margin-bottom: 1.5rem;">
+      <img src="${safeImg}" alt="${escapeAnnHtml(event.title)}" style="width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+      <p style="color: var(--text-sub); line-height: 1.7; margin-bottom: 1.25rem;">${escapeAnnHtml(event.description)}</p>
+      ${highlightsBlock}
       <div style="border-top: 1px solid var(--border-light); padding-top: 1.25rem;">
         <h4 style="font-weight: 700; color: var(--gov-navy); margin-bottom: 0.85rem;">市民線上預約報名：</h4>
         <div class="form-grid" style="margin-bottom: 1rem;">
@@ -366,7 +552,7 @@ function openEventRegisterModal(id) {
             <input type="tel" class="form-control" id="evtRegPhone" placeholder="例如：0912-345-678">
           </div>
         </div>
-        <button class="btn btn-primary" style="width: 100%;" onclick="submitEventRegistration('${event.title}')">送出報名申請</button>
+        <button class="btn btn-primary" style="width: 100%;" onclick="submitEventRegistration('${escapeAnnHtml(event.id)}')">送出報名申請</button>
       </div>
     </div>
   `;
@@ -374,7 +560,7 @@ function openEventRegisterModal(id) {
   modal.classList.add('active');
 }
 
-function submitEventRegistration(eventName) {
+function submitEventRegistration(eventIdOrTitle) {
   const name = document.getElementById('evtRegName')?.value.trim();
   const phone = document.getElementById('evtRegPhone')?.value.trim();
 
@@ -383,6 +569,8 @@ function submitEventRegistration(eventName) {
     return;
   }
 
+  const matched = (window.MINDE_DATA?.cityEvents || []).find(e => e.id === eventIdOrTitle);
+  const eventName = matched ? matched.title : eventIdOrTitle;
   showToast(`恭喜 ${name}！您已成功預約「${eventName}」，電子票券已簡訊發送至 ${phone}`, 'success');
   closeAllModals();
 }

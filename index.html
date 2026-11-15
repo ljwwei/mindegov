@@ -301,53 +301,6 @@
       </div>
     </section>
 
-    <!-- 市政關鍵績效指標看板 (Civic Stats Bar) -->
-    <div class="civic-stats-bar" aria-label="民德市治理指標">
-      <div class="container">
-        <div class="stats-grid">
-          <div class="stat-item">
-            <div class="stat-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg>
-            </div>
-            <div class="stat-info">
-              <span class="stat-value">2,768,520</span>
-              <span class="stat-label">民德市設籍人口</span>
-            </div>
-          </div>
-
-          <div class="stat-item">
-            <div class="stat-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            </div>
-            <div class="stat-info">
-              <span class="stat-value">98.4 %</span>
-              <span class="stat-label">便民服務市民滿意度</span>
-            </div>
-          </div>
-
-          <div class="stat-item">
-            <div class="stat-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-            </div>
-            <div class="stat-info">
-              <span class="stat-value">2.4 天</span>
-              <span class="stat-label">市長信箱平均結案時效</span>
-            </div>
-          </div>
-
-          <div class="stat-item">
-            <div class="stat-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-            </div>
-            <div class="stat-info">
-              <span class="stat-value">1999 專線</span>
-              <span class="stat-label">全天候 24 小時守護市民</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- ========================================================
          章節 2: 便民服務快速入口 (Citizen Quick Services)
          ======================================================== -->
@@ -446,9 +399,9 @@
         </div>
 
         <div class="announcement-footer">
-          <button class="btn btn-secondary" onclick="showToast('已為您呈現全體 8 筆公告資料', 'info')">
+          <button type="button" class="btn btn-secondary" id="viewAllAnnouncementsBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            <span>檢視歷史市政公告檔案庫</span>
+            <span>檢視全部市政公告</span>
           </button>
         </div>
       </div>
@@ -659,7 +612,7 @@
 
                   <div class="form-group full-width" style="margin-top: 0.5rem;">
                     <label class="checkbox-label">
-                      <input type="checkbox" id="privacyAgreeCheck" checked required>
+                      <input type="checkbox" id="privacyAgreeCheck" required>
                       <span>我已閱讀並同意<strong>《民德市政府個人資料保護法告知條款》</strong>及<strong>《市民陳情通報處理要點》</strong>，所陳報之內容均屬真實，並同意市府專責人員與本人電話聯繫勘驗。</span>
                     </label>
                   </div>
@@ -806,8 +759,7 @@
 
           <div style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">
             <div>本網站資料開放宣告：CC-BY 4.0</div>
-            <div>累積瀏覽總人次：<strong>14,892,104</strong> 人</div>
-            <div>最近版本更新日期：115 年 10 月 25 日</div>
+            <div>累積瀏覽總人次：<strong id="siteVisitCount">0</strong> 人</div>
           </div>
         </div>
       </div>
