@@ -137,43 +137,27 @@ function initLiveWeather() {
     return 5;
   }
 
-  // 資料由 GitHub Actions 定時抓取並寫入 data/weather.json (金鑰僅存在伺服器端)。
-  // GitHub Pages 每次 commit 都要重新部署且有 CDN 快取，常落後數分鐘到數十分鐘；
-  // 因此同時讀取 raw.githubusercontent.com (commit 後幾秒內即可取得) 與網站本身的檔案，取較新的一份。
-  const RAW_URL = 'https://raw.githubusercontent.com/ljwwei/mindegov/main/data/weather.json';
-
-  async function loadJson(url) {
-    const res = await fetch(`${url}?t=${Date.now()}`, { cache: 'no-store' });
-    if (!res.ok) throw new Error(res.status);
-    return res.json();
+  // 改由 Cloudflare Worker (/api/weather) 即時代理並於邊緣節點快取 5 分鐘（CWA_API_KEY 與 MOENV_API_KEY 僅存於 Worker Secrets）
+  const apiBase = getMindeApiBase();
+  if (!apiBase) {
+    setTemp('--', '');
+    setAqi('空氣品質 --', '');
+    return;
   }
 
-  function dataStamp(d) {
-    const a = Date.parse(d && d.tempObsTime) || 0;
-    const b = Date.parse(d && d.aqiPublishTime && String(d.aqiPublishTime).replace(/\//g, '-').replace(' ', 'T') + '+08:00') || 0;
-    const u = Date.parse(d && d.updatedAt) || 0;
-    return [a + b, u];
-  }
-
-  async function loadNewest() {
-    const results = await Promise.allSettled([loadJson(RAW_URL), loadJson('data/weather.json')]);
-    const ok = results.filter(r => r.status === 'fulfilled').map(r => r.value);
-    if (!ok.length) throw new Error('all sources failed');
-    ok.sort((x, y) => {
-      const [xs, xu] = dataStamp(x), [ys, yu] = dataStamp(y);
-      return (ys - xs) || (yu - xu);
-    });
-    return ok[0];
-  }
+  let lastFetchedAt = 0;
 
   async function refresh() {
     try {
-      const d = await loadNewest();
+      const res = await fetch(`${apiBase}/api/weather?_t=${Date.now()}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error(res.status);
+      const d = await res.json();
+      lastFetchedAt = Date.now();
 
-      const t = parseFloat(d.temperature);
+      const t = parseFloat(d && d.temperature);
       setTemp(isNaN(t) ? '--' : t.toFixed(1), isNaN(t) ? '' : formatDataTime(d.tempObsTime, true));
 
-      const aqi = parseInt(d.aqi, 10);
+      const aqi = parseInt(d && d.aqi, 10);
       if (isNaN(aqi)) {
         setAqi('空氣品質 --', '');
       } else {
@@ -188,10 +172,10 @@ function initLiveWeather() {
   }
 
   refresh();
-  setInterval(refresh, 60 * 1000);
-  // 分頁從背景切回前景時立即更新 (背景分頁的計時器會被瀏覽器延後)
+  setInterval(refresh, 5 * 60 * 1000);
+  // 分頁從背景切回前景時若距上次抓取超過 60 秒即更新
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) refresh();
+    if (!document.hidden && Date.now() - lastFetchedAt >= 60 * 1000) refresh();
   });
 }
 
@@ -247,15 +231,6 @@ function initAccessibility() {
       }
     });
   });
-
-  // 緊急跑馬燈關閉按鈕
-  const tickerClose = document.getElementById('tickerCloseBtn');
-  const emergencyTicker = document.getElementById('emergencyTicker');
-  if (tickerClose && emergencyTicker) {
-    tickerClose.addEventListener('click', () => {
-      emergencyTicker.style.display = 'none';
-    });
-  }
 }
 
 /* ========================================================

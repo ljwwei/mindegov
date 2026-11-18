@@ -329,9 +329,8 @@ main section[id] {
 
   /* ========================================================
      手機頂端排版重整：由上往下依序為
-     1. 即時市政快訊 (.emergency-ticker)
-     2. Logo 導覽區塊 (.main-header)
-     3. 時間與氣溫 AQI 區塊 (.top-utility-bar)
+     1. Logo 導覽區塊 (.main-header)
+     2. 時間與氣溫 AQI 區塊 (.top-utility-bar)
      ======================================================== */
   body {
     display: flex;
@@ -343,19 +342,13 @@ main section[id] {
     order: 0;
   }
 
-  .emergency-ticker {
-    order: 1;
-    font-size: 0.82rem;
-    padding: 0.35rem 0;
-  }
-
   .main-header {
-    order: 2;
+    order: 1;
   }
 
   /* ---- 頂端公務列：時間與氣溫 AQI 狀態列 (排在 Logo 區塊下方) ---- */
   .top-utility-bar {
-    order: 3;
+    order: 2;
     padding: 0.4rem 0;
     font-size: 0.78rem;
     background-color: var(--gov-navy-deep);
@@ -366,18 +359,18 @@ main section[id] {
 
   main,
   #mainContent {
-    order: 4;
+    order: 3;
   }
 
   footer,
   #footer {
-    order: 5;
+    order: 4;
   }
 
   .back-to-top,
   .toast-container,
   .modal-backdrop {
-    order: 6;
+    order: 5;
   }
 
   .top-utility-bar .container {
@@ -471,24 +464,6 @@ main section[id] {
   /* 移除手機頂端礙眼的字級與工具按鈕整行 (已完整收錄至漢堡選單內) */
   .top-utility-bar .utility-right {
     display: none !important;
-  }
-
-  /* ---- 快訊跑馬燈 (置於手機版最頂端) ---- */
-  .emergency-ticker {
-    order: 1;
-    font-size: 0.82rem;
-    padding: 0.35rem 0;
-  }
-
-  .ticker-tag {
-    font-size: 0.7rem;
-    padding: 0.15rem 0.5rem;
-    margin-right: 0.6rem;
-  }
-
-  .ticker-close {
-    margin-left: 0.4rem;
-    padding: 0.35rem;
   }
 
   /* ---- 官方標誌：中英對齊，比例完美縮放且英文絕不消失 ---- */
@@ -1176,7 +1151,6 @@ main section[id] {
   }
 
   .top-utility-bar,
-  .emergency-ticker,
   .main-header,
   .hero-section,
   .civic-stats-bar,
