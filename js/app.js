@@ -137,7 +137,8 @@ function initLiveWeather() {
     return 5;
   }
 
-  // 改由 Cloudflare Worker (/api/weather) 即時代理並於邊緣節點快取 5 分鐘（CWA_API_KEY 與 MOENV_API_KEY 僅存於 Worker Secrets）
+  // 改由 Cloudflare Worker (/api/weather) 即時代理並於邊緣節點快取 3 分鐘（CWA_API_KEY 與 MOENV_API_KEY 僅存於 Worker Secrets）
+  const WEATHER_REFRESH_MS = 3 * 60 * 1000;
   const apiBase = getMindeApiBase();
   if (!apiBase) {
     setTemp('--', '');
@@ -172,10 +173,10 @@ function initLiveWeather() {
   }
 
   refresh();
-  setInterval(refresh, 5 * 60 * 1000);
-  // 分頁從背景切回前景時若距上次抓取超過 60 秒即更新
+  setInterval(refresh, WEATHER_REFRESH_MS);
+  // 分頁從背景切回前景時若距上次抓取超過 3 分鐘即更新
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && Date.now() - lastFetchedAt >= 60 * 1000) refresh();
+    if (!document.hidden && Date.now() - lastFetchedAt >= WEATHER_REFRESH_MS) refresh();
   });
 }
 
