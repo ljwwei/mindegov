@@ -137,8 +137,10 @@ function initLiveWeather() {
     return 5;
   }
 
-  // 改由 Cloudflare Worker (/api/weather) 即時代理並於邊緣節點快取 3 分鐘（CWA_API_KEY 與 MOENV_API_KEY 僅存於 Worker Secrets）
+  // 改由 Cloudflare Worker (/api/weather) 即時代理（CWA_API_KEY 與 MOENV_API_KEY 僅存於 Worker Secrets）：
+  // 氣溫每 3 分鐘更新；AQI 僅於每小時 05～20 分每 1 分鐘抓取，抓到本小時新資料就停，直到下小時 05 分再開始
   const WEATHER_REFRESH_MS = 3 * 60 * 1000;
+  const WEATHER_AQI_HUNT_MS = 60 * 1000;
   const apiBase = getMindeApiBase();
   if (!apiBase) {
     setTemp('--', '');
@@ -147,6 +149,34 @@ function initLiveWeather() {
   }
 
   let lastFetchedAt = 0;
+  let lastAqiPublishTime = '';
+  let weatherTimer = null;
+
+  function nextDelayMs() {
+    const nowMs = Date.now();
+    const tw = new Date(nowMs + 8 * 3600 * 1000);
+    const pad = n => String(n).padStart(2, '0');
+    const currentHour = `${tw.getUTCFullYear()}/${pad(tw.getUTCMonth() + 1)}/${pad(tw.getUTCDate())} ${pad(tw.getUTCHours())}`;
+    const minute = tw.getUTCMinutes();
+    const sec = tw.getUTCSeconds();
+    const storedHour = String(lastAqiPublishTime || '').slice(0, 13);
+    const needAqi = !storedHour || storedHour < currentHour;
+
+    if (needAqi && minute >= 5 && minute <= 20) return WEATHER_AQI_HUNT_MS;
+    if (needAqi && minute < 5) {
+      const msTo05 = ((5 - minute) * 60 - sec) * 1000 + 2000;
+      return Math.max(1000, Math.min(WEATHER_REFRESH_MS, msTo05));
+    }
+    return WEATHER_REFRESH_MS;
+  }
+
+  function scheduleNext() {
+    if (weatherTimer != null) clearTimeout(weatherTimer);
+    weatherTimer = setTimeout(() => {
+      weatherTimer = null;
+      return runCycle();
+    }, nextDelayMs());
+  }
 
   async function refresh() {
     try {
@@ -154,6 +184,7 @@ function initLiveWeather() {
       if (!res.ok) throw new Error(res.status);
       const d = await res.json();
       lastFetchedAt = Date.now();
+      if (d && d.aqiPublishTime) lastAqiPublishTime = d.aqiPublishTime;
 
       const t = parseFloat(d && d.temperature);
       setTemp(isNaN(t) ? '--' : t.toFixed(1), isNaN(t) ? '' : formatDataTime(d.tempObsTime, true));
@@ -172,11 +203,19 @@ function initLiveWeather() {
     }
   }
 
-  refresh();
-  setInterval(refresh, WEATHER_REFRESH_MS);
-  // 分頁從背景切回前景時若距上次抓取超過 3 分鐘即更新
+  async function runCycle() {
+    await refresh();
+    scheduleNext();
+  }
+
+  runCycle();
+  // 分頁從背景切回前景時依目前時段節流間隔重抓並重排
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && Date.now() - lastFetchedAt >= WEATHER_REFRESH_MS) refresh();
+    const minWait = Math.min(nextDelayMs(), WEATHER_REFRESH_MS);
+    if (!document.hidden && Date.now() - lastFetchedAt >= minWait) {
+      if (weatherTimer != null) clearTimeout(weatherTimer);
+      runCycle();
+    }
   });
 }
 
